@@ -1,4 +1,4 @@
-DROP DATABASE del3db;
+DROP DATABASE del3dbs;
 CREATE DATABASE del3db;
 USE del3db;
 DROP TABLE invite;
