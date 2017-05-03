@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		ul li {
+			display: inline;
+		}
+		ul {
+			padding: 0;
+		}
+		span {
+			display: inline-block;
+		}
+		h1 {
+			margin: 0;
+		}
+	</style>
+</head>
+<body>
+
+</body>
+</html>
+<span><a href='/'><h1>Pixie Dust Enterprises</h1></a></span>
+<ul>
+	<li><a href="/catalog">Catalog</a></li>
+	<li><a href="/admin">Admin</a></li>
+	<li><a href="/agents">Agents</a></li>
+	{% if user.is_authenticated %}
+		<li><a href="/customers">Customers</a></li>
+		<li><a href="/orders">Orders</a></li>
+		<li><a href="{% url 'set_passwords' %}">Set passwords</a></li>
+		<li>Logged in - {{request.user.username}}<li>
+		<li><a href="/logout">Logout</a>
+	{% endif %}
+	{% if not user.is_authenticated %}
+	<li><a href="/signup">Sign up</a></li>
+	<li><a href="/login">Login</a></li>
+	{% endif %}
+
+</ul>
+{% block content %}
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends 'del3/base.html' %}
+
+{% block content %}
+<h1>Welcome to Pixie Dust Enterprises!</h1>
+{% for customer in customer_list %}
+<p>{{customer.customer_id.first_name}} {{customer.customer_id.last_name}} is linked to User {{customer.customer_id}} and Agent {{customer.agent_id.agent_id}}</p>
+{% endfor %}
+{% endblock %}

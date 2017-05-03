@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Customers</title>
+	<style>
+		table, th, td {
+			border: 1px solid black;
+		}
+	</style>
+</head>
+<body>
+	{% extends 'del3/base.html' %}
+
+	{% block content %}
+	<h1>Customer List</h1>
+	<table>
+		<tr>
+			{% for attrib in attribs|slice:":2"%}
+			<th>{{attrib.name}}</th>
+			{% endfor %}
+			<th>First Name</th>
+			<th>Last Name</th>
+			{% for attrib in attribs|slice:"2:"%}
+			<th>{{attrib.name}}</th>
+			{% endfor %}
+		</tr>
+		
+		{% for customer in customer_list %}
+		<tr>
+			<td>{{customer.customer_id}}</td>
+			<td>{{customer.agent_id}}</td>
+			<td>{{customer.customer_id.first_name}}</td>
+			<td>{{customer.customer_id.last_name}}</td>
+			<td>{{customer.street}}</td>
+			<td>{{customer.city}}</td>
+			<td>{{customer.country}}</td>
+		</tr>
+		{% endfor %}
+
+	{% endblock %}
+</body>
+</html>

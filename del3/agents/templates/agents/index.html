@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Agents</title>
+	<style>
+		table, th, td {
+			border: 1px solid black;
+		}
+	</style>
+</head>
+<body>
+	{% extends 'del3/base.html' %}
+
+	{% block content %}
+	<h1>Agent List</h1>
+	{% if user.is_staff %}
+	<a href="{% url 'agents:generate' %}">Generate Code</a>
+	{% endif %}
+	{% if code %}
+	<p>Generated code is: {{code}}. Please enter this code into the agent code field on the agent sign up page.</p>
+	{% endif %}
+	<table>
+		<tr>
+			{% for attrib in attribs|slice:":1"%}
+			<th>{{attrib.name}}</th>
+			{% endfor %}
+			<th>First Name</th>
+			<th>Last Name</th>
+			{% for attrib in attribs|slice:"1:"%}
+			<th>{{attrib.name}}</th>
+			{% endfor %}
+			{% if user.is_staff %}
+			<th>Delete</th>
+			{% endif %}
+		</tr>
+		{% for agent in agent_list %}
+		<tr>
+			<td>{{agent.agent_id.id}}</td>
+			<td>{{agent.agent_id.first_name}}</td>
+			<td>{{agent.agent_id.last_name}}</td>
+			<td>{{agent.total_transactions}}</td>
+			{% if user.is_staff %}
+				<td><a href="{% url 'agents:delete_agent' agent_id=agent.pk %}">X</a></td>
+			{% endif %}
+		</tr>
+		{% endfor %}
+	</table>
+	{% endblock %}
+</body>
+</html>
