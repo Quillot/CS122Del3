@@ -14,7 +14,7 @@ from django.db import models
 
 class Agent(models.Model):
     agent_id = models.AutoField(primary_key=True)
-    total_transactions = models.IntegerField(blank=True, null=True)
+    total_transactionsx = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
