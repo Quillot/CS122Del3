@@ -1,6 +1,7 @@
 DROP DATABASE del3db;
 CREATE DATABASE del3db;
 USE del3db;
+
 DROP TABLE invite;
 DROP TABLE delivery;
 DROP TABLE content;

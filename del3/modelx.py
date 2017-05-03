@@ -35,7 +35,7 @@ class Content(models.Model):
 
 
 class Customer(models.Model):
-    customer_id = models.IntegerField(primary_key=True)
+    customer_id = models.AutoField(primary_key=True)
     agent = models.ForeignKey(Agent, blank=True, null=True)
     street = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)
@@ -49,7 +49,6 @@ class Customer(models.Model):
 class Delivery(models.Model):
     order = models.ForeignKey('Orderinfo')
     recipient = models.ForeignKey('Recipient')
-    gift = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -57,9 +56,19 @@ class Delivery(models.Model):
         unique_together = (('order', 'recipient'),)
 
 
+class Feature(models.Model):
+    product = models.ForeignKey('Product', primary_key=True)
+    feature_desc = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'feature'
+
+
 class Invite(models.Model):
-    invite_code = models.IntegerField()
-    used = models.IntegerField()
+    invite_id = models.AutoField(primary_key=True)
+    invite_code = models.IntegerField(blank=True, null=True)
+    used = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -68,7 +77,8 @@ class Invite(models.Model):
 
 class Orderinfo(models.Model):
     order_id = models.AutoField(primary_key=True)
-    agent = models.ForeignKey(Agent, blank=True, null=True)
+    agent = models.ForeignKey(Agent)
+    customer = models.ForeignKey(Customer)
     recipient = models.ForeignKey('Recipient', blank=True, null=True)
     issue_date = models.DateField(blank=True, null=True)
     issue_time = models.TimeField(blank=True, null=True)
