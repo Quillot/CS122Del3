@@ -4,6 +4,8 @@ from django.core.urlresolvers import reverse
 from django.contrib.admin.views.decorators import staff_member_required
 
 from .models import Product
+from orders.models import OrderInfo, Content
+from customers.models import Customer
 
 from .forms import ProductForm
 
@@ -31,7 +33,52 @@ def index(request):
 	attribs = Product._meta.fields
 	return render(request, 'catalog/index.html', {'product_list': product_list, 'attribs': attribs})
 
-@staff_member_required
+def add_to_cart(request, product_id):
+	if request.user.is_authenticated():
+		product = Product.objects.get(pk=product_id)
+		curr_customer = Customer.objects.get(customer_id=request.user.id)
+		orders = OrderInfo.objects.filter(customer_id=request.user.id)
+		if len(orders) == 0:  # If no current cart
+			#make a new cart
+			cart = OrderInfo()
+			cart.agent_id = curr_customer.agent_id
+			cart.customer_id = curr_customer
+			cart.issue_date = None
+			cart.issue_time = None
+			cart.delivery_date = None
+			cart.delivery_time = None
+			cart.save()
+
+			#add the product to it
+			contents = Content()
+			contents.order_id = cart
+			contents.product_id = product
+			contents.personalization = 'test'
+			contents.quantity_stocked = 10
+			contents.discount = 0.00
+			contents.save()
+			return HttpResponseRedirect(reverse('catalog:index'))
+		elif len(orders) > 0:  # if there is existing cart or orders
+			for order in orders:
+				if order.delivery_date is not None:  # if already delivered
+					return HttpResponse('Already delivered, make a new cart')
+				elif order.delivery_date is None:  # if still a cart
+					#add the product to cart
+					contents = Content()
+					contents.order_id = order
+					contents.product_id = product
+					contents.personalization = 'test'
+					contents.quantity_stocked = 10
+					contents.discount = 0.00
+					contents.save()
+					return HttpResponseRedirect(reverse('catalog:index'))
+				else: pass
+			return HttpResponse('test')
+	else:
+		#if not authenticated
+		return HttpResponseRedirect(reverse('catalog:index'))
+
+
 def add_product(request):
 	if request.user.is_staff:
 		form = ProductForm()

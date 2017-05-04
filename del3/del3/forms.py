@@ -9,13 +9,13 @@ from .models import Invite
 
 class SignUpForm(UserCreationForm):
 	username = forms.CharField(max_length=30, required=True, help_text='Required')
-	firstname = forms.CharField(max_length = 30, required=False, help_text='Optional')
-	lastname = forms.CharField(max_length=30, required = False, help_text='Optional')
-	email = forms.EmailField(max_length=254, required = False, help_text = 'Optional')
-	agentid = forms.ModelChoiceField(queryset=Agent.objects.all())
-	street = forms.CharField(max_length=255, required=False, help_text = 'Optional until checkout')
-	city = forms.CharField(max_length=255, required=False, help_text = 'Optional until checkout')
-	country = forms.CharField(max_length=255, required=False, help_text = 'Optional until checkout')
+	firstname = forms.CharField(max_length = 30, required=False, help_text='Required')
+	lastname = forms.CharField(max_length=30, required = False, help_text='Required')
+	email = forms.EmailField(max_length=254, required = False, help_text = 'Required')
+	agentid = forms.ModelChoiceField(queryset=Agent.objects.all(), required=True, help_text='Choose an agent to handle your orders')
+	street = forms.CharField(max_length=255, required=False, help_text = 'Required')
+	city = forms.CharField(max_length=255, required=False, help_text = 'Required')
+	country = forms.CharField(max_length=255, required=False, help_text = 'Required')
 
 
 	class Meta:
@@ -55,9 +55,9 @@ class LoginForm(forms.Form):
 
 class SignUpAgentForm(UserCreationForm):
 	username = forms.CharField(max_length=30, required=True, help_text='Required')
-	firstname = forms.CharField(max_length = 30, required=False, help_text='Optional')
-	lastname = forms.CharField(max_length=30, required = False, help_text='Optional')
-	email = forms.EmailField(max_length=254, required = False, help_text='Optional')
+	firstname = forms.CharField(max_length = 30, required=True, help_text='Required')
+	lastname = forms.CharField(max_length=30, required=True, help_text='Required')
+	email = forms.EmailField(max_length=254, required=True, help_text='Required')
 	code = forms.IntegerField(required=True, help_text='Enter invitation code')
 
 	class Meta:

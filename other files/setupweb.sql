@@ -1,6 +1,6 @@
-DROP DATABASE del3db;
-CREATE DATABASE del3db;
-USE del3db;
+DROP DATABASE Quillot$del3db;
+CREATE DATABASE Quillot$del3db;
+USE Quillot$del3db;
 
 DROP TABLE invite;
 DROP TABLE delivery;
