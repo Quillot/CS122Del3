@@ -15,11 +15,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'catalog',
     'agents',
-    'orders', 
+    'catalog',
     'del3',
     'customers',
+    'orders',
 )
 
 MIDDLEWARE_CLASSES = (
