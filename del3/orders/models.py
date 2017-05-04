@@ -25,9 +25,9 @@ class OrderInfo(models.Model):
 	agent_id = models.ForeignKey(Agent, db_column='agent_id', null=False, blank=False, default=2)
 	customer_id = models.ForeignKey(Customer, db_column='customer_id', null=False, blank=False, default=4)
 	issue_date = models.DateField(blank=False, null=False, default='2017-01-01')
-	issue_time = models.TimeField(blank=False, null=False)
+	issue_time = models.TimeField(blank=False, null=False, default='12:00:00')
 	delivery_date = models.DateField(blank=False, null=False, default='2017-01-01')
-	delivery_time = models.TimeField(blank=False, null=False)	
+	delivery_time = models.TimeField(blank=False, null=False, default='12:00:00')	
 
 	def __str__(self):
 		return str(self.order_id)
@@ -50,7 +50,6 @@ class Content(models.Model):
 	class Meta:
 		app_label = 'orders'
 		db_table = 'content'
-		unique_together = (('order_id', 'product_id'),)
 
 class Delivery(models.Model):
 	delivery_id = models.AutoField(primary_key=True, unique=True)
@@ -60,4 +59,3 @@ class Delivery(models.Model):
 	class Meta:
 		app_label = 'orders'
 		db_table = 'delivery'
-		unique_together = (('order_id', 'recipient_id'),)

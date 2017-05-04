@@ -28,13 +28,25 @@
 		<tr>
 			<td>{{order.order_id}}</td>
 			<td>{{order.agent_id}}</td>
-			<td>{{order.recipient_id}}</td>
-			<td>{{order.recipient_id.first_name}} {{order.recipient_id.last_name}}</td>
+			<td >{{order.customer_id.pk}}</td>
+
+			{% for delivery in delivery_list %}
+			{% if order.pk == delivery.pk %}
+			<td>{{delivery.recipient_id}}</td>
+			{% endif %}
+			{% endfor %}
+
 			<td>{{order.issue_date}}</td>
 			<td>{{order.issue_time}}</td>
 			<td>{{order.delivery_date}}</td>
 			<td>{{order.delivery_time}}</td>
-			<td>Agent {{order.agent_id}} {{order.agent_id.first_name}} in charge of Order {{order.order_id}} sent to Recipient {{order.recipient_id}} {{order.recipient_id.first_name}}</td>	
+
+			{% for delivery in delivery_list %}
+			{% if order.pk == delivery.pk %}
+			<td>Agent {{order.agent_id}} {{order.agent_id.first_name}} in charge of Order {{order.order_id}} sent to Recipient {{delivery.recipient_id}} {{delivery.recipient_id.first_name}}</td>
+			{% endif %}
+			{% endfor %}
+				
 		</tr>
 		{% endfor %}
 	</table>

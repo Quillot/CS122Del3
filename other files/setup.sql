@@ -61,18 +61,18 @@ CREATE TABLE orderinfo (
 	agent_id INT NOT NULL DEFAULT 2,
 	customer_id INT NOT NULL DEFAULT 4,
 	issue_date DATE NOT NULL DEFAULT '2017-01-01',
-	issue_time TIME NOT NULL,
+	issue_time TIME NOT NULL DEFAULT '12:00:00',
 	delivery_date DATE NOT NULL DEFAULT '2017-01-01',
-	delivery_time TIME NOT NULL,
+	delivery_time TIME NOT NULL DEFAULT '12:00:00',
 	FOREIGN KEY (agent_id) REFERENCES agent(agent_id),
 	FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
 );
 
 CREATE TABLE content (
-	-- content_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
+	content_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
 	order_id INT NOT NULL, 	
 	product_id INT NOT NULL, 
-	PRIMARY KEY (order_id, product_id),
+	-- PRIMARY KEY (order_id, product_id),
 	personalization VARCHAR(255) DEFAULT "",
 	quantity_ordered INT DEFAULT 1,
 	discount FLOAT(2) DEFAULT 0.00,
@@ -81,10 +81,10 @@ CREATE TABLE content (
 );
 
 CREATE TABLE delivery (
-	-- delivery_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
+	delivery_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
 	order_id INT NOT NULL UNIQUE,
 	recipient_id INT NOT NULL DEFAULT 1,
-	PRIMARY KEY (order_id, recipient_id),
+	-- PRIMARY KEY (order_id, recipient_id),
 	-- gift BOOLEAN, 
 	FOREIGN KEY (order_id) REFERENCES orderinfo(order_id),
 	FOREIGN KEY (recipient_id) REFERENCES recipient(recipient_id)

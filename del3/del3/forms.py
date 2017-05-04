@@ -96,6 +96,11 @@ class SignUpAgentForm(UserCreationForm):
 		if code != '':
 			try:
 				code_check = Invite.objects.get(invite_code=code)
+				if code_check.used == 0:
+					code_check.used = 1
+					code_check.save()
+					return True
+				else:
+					raise forms.ValidationError('Code already used')
 			except Invite.DoesNotExist:
 				raise forms.ValidationError('Code not found')
-			return True
