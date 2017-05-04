@@ -2,6 +2,7 @@
 ### Steps for connecting to PythonAnywhere
 Link - Quillot.pythonanywhere.com
 Run git pull, and then source django/bin/activate
+source /home/Quillot/CS122Del3/other files/setupweb.sql;
 1. Fix code section.
     * Source code: /home/Quillot/CS122Del3/del3/del3
     * Working directory: /home/Quillot
