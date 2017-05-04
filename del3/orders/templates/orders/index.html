@@ -25,17 +25,18 @@
 			<th>summary</th>
 		</tr>
 		{% for order in order_list %}
+		{% if order.issue_date != None %}
 		<tr>
 			<td>{{order.order_id}}</td>
 			<td>{{order.agent_id}}</td>
 			<td >{{order.customer_id.pk}}</td>
-
+			
 			{% for delivery in delivery_list %}
 			{% if order.pk == delivery.pk %}
 			<td>{{delivery.recipient_id}}</td>
 			{% endif %}
 			{% endfor %}
-
+			
 			<td>{{order.issue_date}}</td>
 			<td>{{order.issue_time}}</td>
 			<td>{{order.delivery_date}}</td>
@@ -48,6 +49,7 @@
 			{% endfor %}
 				
 		</tr>
+		{% endif %}
 		{% endfor %}
 	</table>
 	<h1>Order Contents</h1>
@@ -72,6 +74,10 @@
 			<td>{{content.discount}}</td>
 		{% endfor %}
 	</table>
+	<h1>Cart Contents</h1>
+	<table>
+		<tr>
+			<th>order_id, 
 	{% endblock %}
 </body>
 </html>

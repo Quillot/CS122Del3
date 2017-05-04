@@ -40,43 +40,53 @@ def add_to_cart(request, product_id):
 		orders = OrderInfo.objects.filter(customer_id=request.user.id)
 		if len(orders) == 0:  # If no current cart
 			#make a new cart
-			cart = OrderInfo()
-			cart.agent_id = curr_customer.agent_id
-			cart.customer_id = curr_customer
-			cart.issue_date = None
-			cart.issue_time = None
-			cart.delivery_date = None
-			cart.delivery_time = None
-			cart.save()
-
+			cart = create_cart(curr_customer)
 			#add the product to it
-			contents = Content()
-			contents.order_id = cart
-			contents.product_id = product
-			contents.personalization = 'test'
-			contents.quantity_stocked = 10
-			contents.discount = 0.00
-			contents.save()
+			contents = insert_contents(cart, product)
 			return HttpResponseRedirect(reverse('catalog:index'))
 		elif len(orders) > 0:  # if there is existing cart or orders
-			for order in orders:
-				if order.delivery_date is not None:  # if already delivered
-					return HttpResponse('Already delivered, make a new cart')
-				elif order.delivery_date is None:  # if still a cart
-					#add the product to cart
-					contents = Content()
-					contents.order_id = order
-					contents.product_id = product
-					contents.personalization = 'test'
-					contents.quantity_stocked = 10
-					contents.discount = 0.00
-					contents.save()
-					return HttpResponseRedirect(reverse('catalog:index'))
-				else: pass
-			return HttpResponse('test')
+			x = OrderInfo.objects.filter(delivery_time=None)
+			y = set(orders).intersection(set(x))
+			if len(y) > 0:  # if there is existing cart
+				contents = insert_contents(y.pop(), product)
+				return HttpResponseRedirect(reverse('catalog:index'))
+			else:
+				cart = create_cart(curr_customer)
+				contents = insert_contents(cart, product)
+				return HttpResponseRedirect(reverse('catalog:index'))
 	else:
 		#if not authenticated
 		return HttpResponseRedirect(reverse('catalog:index'))
+
+def create_cart(customer):
+	cart = OrderInfo()
+	cart.agent_id = customer.agent_id
+	cart.customer_id = customer
+	cart.issue_date = None
+	cart.issue_time = None
+	cart.delivery_date = None
+	cart.delivery_time = None
+	cart.save()
+	return cart
+
+def insert_contents(cart, product):
+	try:
+		contents = Content.objects.get(order_id=cart, product_id=product)
+		contents.quantity_ordered += 10
+	except Content.DoesNotExist:
+		contents = Content()
+		contents.order_id = cart
+		contents.product_id = product
+		contents.personalization = 'test'
+		contents.quantity_ordered = 10
+		contents.discount = 0.00
+	contents.save()
+
+	product.quantity_stocked -= 10
+	product.save()
+
+	return contents
+
 
 
 def add_product(request):
