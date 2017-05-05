@@ -2,9 +2,18 @@
 <html>
 <head>
 	<title>Orders</title>
+
 	<style>
+		* {
+			padding: 0;
+			margin: 0;
+		}
 		table, th, td {
 			border: 1px solid black;
+		}
+		h1 {
+			text-align: center;
+			padding-bottom: 10px;
 		}
 	</style>
 </head>
@@ -12,14 +21,15 @@
 	{% extends 'del3/base.html' %}
 
 	{% block content %}
+	<div class="container">
 	<h1>Order List</h1>
-	<table>
+	<table class="table table-responsive table-striped">
 		<tr>
-			{% for attrib in attribs|slice:":3" %}
+			{% for attrib in order_attribs|slice:":3" %}
 			<th>{{attrib.name}}</th>
 			{% endfor %}
 			<th>recipient</th>
-			{% for attrib in attribs|slice:"3:" %}
+			{% for attrib in order_attribs|slice:"3:" %}
 			<th>{{attrib.name}}</th>
 			{% endfor %}
 			<th>summary</th>
@@ -53,7 +63,7 @@
 		{% endfor %}
 	</table>
 	<h1>Order Contents</h1>
-	<table>
+	<table class="table table-responsive table-striped">
 		<tr>
 			<th>order id</th>
 			<th>product id</th>
@@ -75,9 +85,16 @@
 		{% endfor %}
 	</table>
 	<h1>Cart Contents</h1>
-	<table>
+	<table class="table table-responsive table-striped">
 		<tr>
-			<th>order_id, 
+			{% for content_attrib in content_attribs|slice:":3" %}
+			<th>{{content_attrib.name}}</th>
+			{% endfor %}
+			{% for content_attrib in content_attribs|slice:"3:" %}
+			<th>{{content_attrib.name}}</th>
+			{% endfor %}
+
+	</div>
 	{% endblock %}
 </body>
 </html>
