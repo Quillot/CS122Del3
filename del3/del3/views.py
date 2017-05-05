@@ -21,13 +21,13 @@ def signup(request):
 		if request.method == 'POST':
 			form = SignUpForm(request.POST)
 			if form.is_valid():
-				username = form.cleaned_data.get('username')
-				password = form.cleaned_data.get('password1')
-				form.save()
-				user = authenticate(username=username, password=password)
+				user = form.save()
+				user.save()
+				password=form.cleaned_data.get('password1')
+				user = authenticate(username=user.username, password=password)
 				firstname = form.cleaned_data.get('firstname')
 				lastname = form.cleaned_data.get('lastname')
-				agentid = form.cleaned_data.get('agentid')
+				agentid = form.cleaned_data.get('agent')
 				street = form.cleaned_data.get('street')
 				city = form.cleaned_data.get('city')
 				country = form.cleaned_data.get('country')
@@ -56,10 +56,9 @@ def signup_agent(request):
 		if request.method == 'POST':
 			form = SignUpAgentForm(request.POST)
 			if form.is_valid():
-				username = form.cleaned_data.get('username')
+				user = form.save()
 				password = form.cleaned_data.get('password1')
-				form.save()
-				user = authenticate(username=username, password=password)
+				user = authenticate(username=user.username, password=password)
 				agent = Agent()
 				agent.agent_id = user
 				agent.total_transaction = 0

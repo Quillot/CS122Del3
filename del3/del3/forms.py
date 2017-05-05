@@ -8,11 +8,10 @@ from .models import Invite
 
 
 class SignUpForm(UserCreationForm):
-	username = forms.CharField(max_length=30, required=True, help_text='Required')
-	firstname = forms.CharField(max_length = 30, required=True, help_text='Required')
-	lastname = forms.CharField(max_length=30, required=True, help_text='Required')
-	email = forms.EmailField(max_length=254, require=True, help_text = 'Required')
-	agentid = forms.ModelChoiceField(queryset=Agent.objects.all(), required=True, help_text='Choose an agent to handle your orders')
+	first_name = forms.CharField(max_length = 30, required=True, help_text='Required')
+	last_name = forms.CharField(max_length=30, required=True, help_text='Required')
+	email = forms.EmailField(max_length=254, required=True, help_text = 'Required')
+	agent = forms.ModelChoiceField(queryset=Agent.objects.all(), required=True, help_text='Choose an agent to handle your orders')
 	street = forms.CharField(max_length=255, required=True, help_text = 'Required')
 	city = forms.CharField(max_length=255, required=True, help_text = 'Required')
 	country = forms.CharField(max_length=255, required=True, help_text = 'Required')
@@ -20,87 +19,92 @@ class SignUpForm(UserCreationForm):
 
 	class Meta:
 		model = User
-		fields = ('username', 'firstname', 'lastname', 'password1', 
-			'password2', 'email', 'agentid', 'street', 'city', 'country')
+		fields = ('username', 'first_name', 'last_name', 'password1', 
+			'password2', 'email', 'agent', 'street', 'city', 'country')
 
-	def save(self, commit=True):
-		user = User.objects.create_user(username=self.cleaned_data['username'], password=self.cleaned_data['password1'])
+	def save(self, commit=False):
+		user = User.objects.create_user(username=self.clean_username(), password=self.cleaned_data['password1'])
 		user.email = self.clean_email()
-		user.first_name = self.cleaned_data['firstname']
-		user.last_name = self.cleaned_data['lastname']
-		if commit:
+		user.first_name = self.cleaned_data.get('first_name')
+		user.last_name = self.cleaned_data.get('last_name')
+		fields = user._meta.fields
+		for field in fields:
+			if field is not None:
+				all_clear = True
+			else:
+				all_clear = False
+		if fields[-1] is not None and all_clear and commit:
 			user.save()
 		return user
 
 	def clean_username(self):
-		username = self.cleaned_data['username']
-		try:
-			user = User.objects.get(username=username)
-		except User.DoesNotExist:
+		username = self.cleaned_data.get('username')
+		if User.objects.filter(username=username).exists():
+			raise forms.ValidationError('Username already in use')
+		else:
 			return username
-		raise forms.ValidationError('Username already in use')
 
 	def clean_email(self):
-		email = self.cleaned_data['email']
-		if email != '':
-			try:
-				user = User.objects.get(email=email)
-			except User.DoesNotExist:
-				return email
+		email = self.cleaned_data.get('email')
+		if User.objects.filter(email=email).exists():
 			raise forms.ValidationError('Email already in use')
+		else:
+			return email
 
 class LoginForm(forms.Form):
 	username = forms.CharField(max_length=30, required=True)
 	password = forms.CharField(widget=forms.PasswordInput(), max_length=30, required=True)
 
 class SignUpAgentForm(UserCreationForm):
-	username = forms.CharField(max_length=30, required=True, help_text='Required')
-	firstname = forms.CharField(max_length = 30, required=True, help_text='Required')
-	lastname = forms.CharField(max_length=30, required=True, help_text='Required')
+	first_name = forms.CharField(max_length = 30, required=True, help_text='Required')
+	last_name = forms.CharField(max_length=30, required=True, help_text='Required')
 	email = forms.EmailField(max_length=254, required=True, help_text='Required')
 	code = forms.IntegerField(required=True, help_text='Enter invitation code')
 
 	class Meta:
 		model = User
-		fields = ('username', 'firstname', 'lastname', 'password1', 
-			'password2', 'email')
+		fields = ('username', 'first_name', 'last_name', 'password1', 
+			'password2', 'email', 'code')
 
-	def save(self, commit=True):
-		user = User.objects.create_user(username=self.cleaned_data['username'], password=self.cleaned_data['password1'])
+	def save(self, commit=False):
+		user = User.objects.create_user(username=self.clean_username(), password=self.cleaned_data['password1'])
 		user.email = self.clean_email()
-		user.first_name = self.cleaned_data['firstname']
-		user.last_name = self.cleaned_data['lastname']
-		if commit and self.clean_code:
+		user.first_name = self.cleaned_data.get('first_name')
+		user.last_name = self.cleaned_data.get('last_name')
+		code = self.clean_code()[0]
+		if code:
+			code.used = True
+			code.save()
+		fields = user._meta.fields
+		for field in fields:
+			if field is not None:
+				all_clear = True
+			else:
+				all_clear = False
+		if fields[-1] is not None and all_clear and commit:
 			user.save()
 		return user
 
 	def clean_username(self):
-		username = self.cleaned_data['username']
-		try:
-			user = User.objects.get(username=username)
-		except User.DoesNotExist:
+		username = self.cleaned_data.get('username')
+		if User.objects.filter(username=username).exists():
+			raise forms.ValidationError('Username already in use')
+		else:
 			return username
-		raise forms.ValidationError('Username already in use')
 
 	def clean_email(self):
-		email = self.cleaned_data['email']
-		if email != '':
-			try:
-				user = User.objects.get(email=email)
-			except User.DoesNotExist:
-				return email
+		email = self.cleaned_data.get('email')
+		if User.objects.filter(email=email).exists():
 			raise forms.ValidationError('Email already in use')
+		else:
+			return email
 
 	def clean_code(self):
-		code = self.cleaned_data['code']
-		if code != '':
-			try:
-				code_check = Invite.objects.get(invite_code=code)
-				if code_check.used == 0:
-					code_check.used = 1
-					code_check.save()
-					return True
-				else:
-					raise forms.ValidationError('Code already used')
-			except Invite.DoesNotExist:
-				raise forms.ValidationError('Code not found')
+		invite_code = self.cleaned_data.get('code')
+		code = Invite.objects.filter(invite_code=invite_code)
+		if len(code) == 0:
+			raise forms.ValidationError('Code not found')
+		elif code[0].used == 1:
+			raise forms.ValidationError('Code already used')
+		else:
+			return code
