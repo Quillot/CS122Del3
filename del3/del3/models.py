@@ -8,3 +8,6 @@ class Invite(models.Model):
 	class Meta:
 		app_label = 'del3'
 		db_table ='invite'
+
+	def __str__(self):
+		return str(self.invite_id)

@@ -45,9 +45,12 @@ VALUES
 
 INSERT INTO invite(invite_id, invite_code, used)
 VALUES
-(1, 12345, 0),
-(2, 11111, 0),
-(3, 12341, 0);
+(1, 1, 0),
+(2, 2, 0),
+(3, 3, 0),
+(4, 4, 0),
+(5, 5, 0);
+
 
 INSERT INTO feature(product_id, feature_desc)
 VALUES

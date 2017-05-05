@@ -9,13 +9,13 @@ from .models import Invite
 
 class SignUpForm(UserCreationForm):
 	username = forms.CharField(max_length=30, required=True, help_text='Required')
-	firstname = forms.CharField(max_length = 30, required=False, help_text='Required')
-	lastname = forms.CharField(max_length=30, required = False, help_text='Required')
-	email = forms.EmailField(max_length=254, required = False, help_text = 'Required')
+	firstname = forms.CharField(max_length = 30, required=True, help_text='Required')
+	lastname = forms.CharField(max_length=30, required=True, help_text='Required')
+	email = forms.EmailField(max_length=254, require=True, help_text = 'Required')
 	agentid = forms.ModelChoiceField(queryset=Agent.objects.all(), required=True, help_text='Choose an agent to handle your orders')
-	street = forms.CharField(max_length=255, required=False, help_text = 'Required')
-	city = forms.CharField(max_length=255, required=False, help_text = 'Required')
-	country = forms.CharField(max_length=255, required=False, help_text = 'Required')
+	street = forms.CharField(max_length=255, required=True, help_text = 'Required')
+	city = forms.CharField(max_length=255, required=True, help_text = 'Required')
+	country = forms.CharField(max_length=255, required=True, help_text = 'Required')
 
 
 	class Meta:
