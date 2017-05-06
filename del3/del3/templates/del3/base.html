@@ -53,15 +53,17 @@
 		<li><a href="/customers">Customers</a></li>
 		<li><a href="/orders">Orders</a></li>
 		<li><a href="{% url 'set_passwords' %}">Set passwords</a></li>
-		<li><a href="/logout">Logout</a>
-	{% endif %}
-	{% if not user.is_authenticated %}
-	<li><a href="/signup">Sign up</a></li>
-	<li><a href="/login">Login</a></li>
 	{% endif %}
 </ul>
 {% if user.is_authenticated %}
+{% if not user.is_staff %}
+<p class="navbar-text pull-right"><a href="/cart">Cart</a></p>
+{% endif %}
+<p class="navbar-text pull-right"><a href="/logout">Logout</a></p>
 <p class="navbar-text pull-right">Logged in - {{request.user.username}}</p>
+{% else %}
+<p class="navbar-text pull-right"><a href="/signup">Sign up</a></p>
+<p class="navbar-text pull-right"><a href="/login">Login</a></p>
 {% endif %}
 	</div>
 </nav>

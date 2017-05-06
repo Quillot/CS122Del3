@@ -28,6 +28,7 @@ class OrderInfo(models.Model):
 	issue_time = models.TimeField(blank=False, null=False, default='12:00:00')
 	delivery_date = models.DateField(blank=False, null=False, default='2017-01-01')
 	delivery_time = models.TimeField(blank=False, null=False, default='12:00:00')	
+	cart_ready = models.BooleanField(blank=False, null=False, default=0)
 
 	def __str__(self):
 		return str(self.order_id)

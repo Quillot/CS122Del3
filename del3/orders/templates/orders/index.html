@@ -29,7 +29,7 @@
 			<th>{{attrib.name}}</th>
 			{% endfor %}
 			<th>recipient</th>
-			{% for attrib in order_attribs|slice:"3:" %}
+			{% for attrib in order_attribs|slice:"3:7" %}
 			<th>{{attrib.name}}</th>
 			{% endfor %}
 			<th>summary</th>
@@ -74,6 +74,7 @@
 			<th>discount</th>
 		</tr>
 		{% for content in content_list %}
+		{% if content.order_id.cart_ready == True and content.order_id.issue_date %}
 		<tr>
 			<td>{{content.order_id}}</td>
 			<td>{{content.product_id}}</td>
@@ -82,6 +83,8 @@
 			<td>{{content.personalization}}</td>
 			<td>{{content.quantity_ordered}}</td>
 			<td>{{content.discount}}</td>
+		</tr>
+		{% endif %}
 		{% endfor %}
 	</table>
 	<h1>Cart Contents</h1>
@@ -93,7 +96,19 @@
 			{% for content_attrib in content_attribs|slice:"3:" %}
 			<th>{{content_attrib.name}}</th>
 			{% endfor %}
-
+		</tr>
+		{% for content in content_list %}
+		{% if content.order_id.cart_ready == True and not content.order_id.issue_date %}
+		<tr>
+			<td>{{content.content_id}}</td>
+			<td>{{content.order_id}}</td>
+			<td>{{content.product_id}}</td>
+			<td>{{content.personalization}}</td>
+			<td>{{content.quantity_ordered}}</td>
+			<td>{{content.discount}}</td>
+		</tr>
+		{% endif %}
+		{% endfor %}
 	</div>
 	{% endblock %}
 </body>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Orders</title>
+
+	<style>
+		* {
+			padding: 0;
+			margin: 0;
+		}
+		table, th, td {
+			border: 1px solid black;
+		}
+		h1 {
+			text-align: center;
+			padding-bottom: 10px;
+		}
+	</style>
+</head>
+<body>
+	{% extends 'del3/base.html' %}
+
+	{% block content %}
+	<div class="container">
+	<h1>Your cart</h1>
+	<table class="table table-responsive table-striped">
+		<tr>
+			{% for attrib in content_attribs %}
+			<th>{{attrib.name}}</th>
+			{% endfor %}
+		</tr>
+
+		{% for content in content_list %}
+		<tr>
+			<td>{{content.content_id}}</td>
+			<td>{{content.order_id}}</td>
+			<td>{{content.product_id}}</td>
+			<td>{{content.personalization}}</td>
+			<td>{{content.quantity_ordered}}</td>
+			<td>{{content.discount}}</td>
+		</tr>
+		{% endfor %}
+	{% endblock %}
+</body>
+</html>

@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 
 from customers.models import Customer
 from agents.models import Agent
+from orders.models import OrderInfo, Content
 
 from .forms import SignUpForm, LoginForm, SignUpAgentForm
 
@@ -108,3 +109,16 @@ def set_passwords(request):
 		user.set_password('test')
 		user.save()
 	return HttpResponseRedirect(reverse('index'))
+
+def cart(request):
+	try:
+		user_cart = OrderInfo.objects.get(customer_id=request.user.id, issue_date=None)
+		content_list = Content.objects.filter(order_id=user_cart)
+	except OrderInfo.DoesNotExist:
+		user_cart = None
+		content_list = None
+	content_attribs = Content._meta.fields
+	if request.user.is_authenticated():
+		return render(request, 'del3/cart.html', {'user_cart': user_cart, 'content_attribs': content_attribs, 'content_list': content_list})
+	else:
+		return HttpResponseRedirect(reverse('index'))

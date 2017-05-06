@@ -41,7 +41,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    # 'del3.auth_backends.CustomUserModelBackend'
+    'django.contrib.sessions.middleware.SessionMiddleware',  # for anon
 )
 
 # CUSTOM_USER_MODEL = 'del3.CustomUser'

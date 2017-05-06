@@ -45,6 +45,10 @@
 		{% if user.is_staff %}
 		<a href='/catalog/add'>Add a product</a>
 		{% endif %}
+
+		{% if warning %}
+		<p>{{warning}}</p>
+		{% endif %}
 	{% endblock %}
 </body>
 </html>

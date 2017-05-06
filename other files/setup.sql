@@ -62,6 +62,7 @@ CREATE TABLE orderinfo (
 	issue_time TIME,
 	delivery_date DATE ,
 	delivery_time TIME,
+	cart_ready BOOLEAN NOT NULL DEFAULT 0,
 	FOREIGN KEY (agent_id) REFERENCES agent(agent_id),
 	FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
 );
