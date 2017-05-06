@@ -12,6 +12,7 @@
      * `SOURCE setup.sql;`
      * `SOURCE populate.sql;`
 6. Finally, run `python manage.py runserver`
+7. To reset the database, drop the database, create it, and do step 5 again
 ### Steps for connecting to PythonAnywhere
 Link - Quillot.pythonanywhere.com
 Run git pull, and then source django/bin/activate
