@@ -46,7 +46,7 @@ def add_to_cart(request, product_id):
 				contents = insert_contents(cart, product)
 				return HttpResponseRedirect(reverse('catalog:index'))
 			elif len(orders) > 0:  # if there is existing cart or orders
-				x = OrderInfo.objects.filter(delivery_time=None)
+				x = OrderInfo.objects.filter(delivery_time=None, cart_ready=False)
 				y = set(orders).intersection(set(x))
 				if len(y) > 0:  # if there is existing cart
 					contents = insert_contents(y.pop(), product)
@@ -92,8 +92,6 @@ def insert_contents(cart, product):
 	product.save()
 
 	return contents
-
-
 
 def add_product(request):
 	if request.user.is_staff:

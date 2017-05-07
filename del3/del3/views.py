@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
@@ -8,9 +8,9 @@ from django.contrib.auth.models import User
 
 from customers.models import Customer
 from agents.models import Agent
-from orders.models import OrderInfo, Content
+from orders.models import OrderInfo, Content, Delivery, Recipient
 
-from .forms import SignUpForm, LoginForm, SignUpAgentForm
+from .forms import SignUpForm, LoginForm, SignUpAgentForm, CartForm
 
 def index(request):
 	customer_list = Customer.objects.all()
@@ -111,14 +111,59 @@ def set_passwords(request):
 	return HttpResponseRedirect(reverse('index'))
 
 def cart(request):
-	try:
-		user_cart = OrderInfo.objects.get(customer_id=request.user.id, issue_date=None)
-		content_list = Content.objects.filter(order_id=user_cart)
-	except OrderInfo.DoesNotExist:
-		user_cart = None
-		content_list = None
-	content_attribs = Content._meta.fields
+	form = CartForm()
 	if request.user.is_authenticated():
-		return render(request, 'del3/cart.html', {'user_cart': user_cart, 'content_attribs': content_attribs, 'content_list': content_list})
+		if request.method == 'POST' and OrderInfo.objects.filter(customer_id=request.user.id, issue_date=None, cart_ready=False).exists():
+			form = CartForm(request.POST)
+			if form.is_valid():
+				recipient = form.save()
+				user_cart = OrderInfo.objects.get(customer_id=request.user.id, issue_date=None, cart_ready=False)
+				content_list = Content.objects.filter(order_id=user_cart)
+				user_cart.cart_ready = True
+				user_cart.save()
+				delivery = Delivery(order_id=user_cart, recipient_id=recipient)
+				delivery.save()
+				request.session['message'] = "Checkout Successful!"
+				return redirect('cart')	
+		try:
+			user_cart = OrderInfo.objects.get(customer_id=request.user.id, issue_date=None, cart_ready=False)
+			content_list = Content.objects.filter(order_id=user_cart)
+			request.session['message'] = ""
+		except OrderInfo.DoesNotExist:
+			user_cart = None
+			content_list = None
+		content_attribs = Content._meta.fields
+		if 'message' in request.session:
+			message = request.session['message']
+			return render(request, 'del3/cart.html', {'content_attribs': content_attribs, 'content_list': content_list, 'message': message, 'form': form})
+		return render(request, 'del3/cart.html', {'content_attribs': content_attribs, 'content_list': content_list, 'form': form})
 	else:
 		return HttpResponseRedirect(reverse('index'))
+
+def checkout(request):
+	if request.user.is_authenticated():
+		if request.method == 'POST' and OrderInfo.objects.filter(customer_id=request.user.id, issue_date=None, cart_ready=False).exists():
+			pass		
+		elif OrderInfo.objects.filter(customer_id=request.user.id, issue_date=None, cart_ready=False).exists():
+			#when recipient is self
+			recipient = Recipient()
+			user_cart = OrderInfo.objects.get(customer_id=request.user.id, issue_date=None, cart_ready=False)
+			content_list = Content.objects.filter(order_id=user_cart)
+			user_cart.cart_ready = True
+			user_cart.save()
+			customer = Customer.objects.get(pk=request.user.id)
+			recipient.first_name = request.user.first_name
+			recipient.last_name = request.user.last_name
+			recipient.street = customer.street
+			recipient.city = customer.city
+			recipient.country = customer.country
+			recipient.save()
+			delivery = Delivery(delivery_id = user_cart.order_id, order_id=user_cart, recipient_id=recipient)
+			delivery.save()
+			request.session['message'] = "Checkout Successful!"
+			return redirect('cart')	
+		else:
+			request.session['message'] = "No items in cart"
+			return redirect('cart')
+			
+		

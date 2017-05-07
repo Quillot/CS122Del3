@@ -46,7 +46,7 @@ class Content(models.Model):
 	discount = models.FloatField(blank=False, null=False, default=0.00)
 
 	def __str__(self):
-		return str(self.order_id + "|" + self.product_id)
+		return str(self.content_id)
 
 	class Meta:
 		app_label = 'orders'
@@ -55,7 +55,11 @@ class Content(models.Model):
 class Delivery(models.Model):
 	delivery_id = models.AutoField(primary_key=True, unique=True)
 	order_id = models.OneToOneField(OrderInfo, db_column='order_id', unique=True)
-	recipient_id = models.ForeignKey(Recipient, db_column='recipient_id', null=False, blank=False, default=1)
+	recipient_id = models.ForeignKey(Recipient, db_column='recipient_id', null=True, blank=False, default=None)
+	gift = models.BooleanField(blank=False, null=False, default=0)
+
+	def __str__(self):
+		return str(self.delivery_id)
 
 	class Meta:
 		app_label = 'orders'

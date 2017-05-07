@@ -20,6 +20,7 @@ urlpatterns = [
 	url(r'^customers/', include('customers.urls', namespace='customers')),
 	url(r'^orders/', include('orders.urls', namespace='orders')),
 	url(r'^cart/', del3_views.cart, name='cart'),
+	url(r'^checkout/', del3_views.checkout, name='checkout'),
 	url(r'^signup/', del3_views.signup, name='signup'),
 	url(r'^signupagent/', del3_views.signup_agent, name='signup_agent'),
 	url(r'^setpasswords/', del3_views.set_passwords, name='set_passwords'),

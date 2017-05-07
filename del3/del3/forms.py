@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from customers.models import Customer
 from agents.models import Agent
 from .models import Invite
+from orders.models import Recipient
 
 
 class SignUpForm(UserCreationForm):
@@ -108,3 +109,33 @@ class SignUpAgentForm(UserCreationForm):
 			raise forms.ValidationError('Code already used')
 		else:
 			return code
+
+class CartForm(forms.Form):
+	first_name = forms.CharField(max_length=255, required=True)
+	last_name = forms.CharField(max_length=255, required=True)
+	street = forms.CharField(max_length=255, required=True)
+	city = forms.CharField(max_length=255, required=True)
+	country = forms.CharField(max_length=255, required=True)
+
+	def save(self, commit=False):
+		recipient = Recipient()
+		first_name = self.cleaned_data.get('first_name')
+		last_name = self.cleaned_data.get('last_name')
+		street = self.cleaned_data.get('street')
+		city = self.cleaned_data.get('city')
+		country = self.cleaned_data.get('country')
+		recipient.first_name = first_name
+		recipient.last_name = last_name
+		recipient.street = street
+		recipient.city = city
+		recipient.country = country
+		fields = recipient._meta.fields
+
+		for field in fields:
+			if field is not None:
+				all_clear = True
+			else:
+				all_clear = False
+		if fields[-1] is not None and all_clear:
+			recipient.save()
+		return recipient

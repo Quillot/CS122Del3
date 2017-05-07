@@ -40,6 +40,32 @@
 			<td>{{content.discount}}</td>
 		</tr>
 		{% endfor %}
+	</table>
+
+	<form class="navbar-form navbar-left" method="post">
+	    <h4>Enter recipient</h4>
+	    <p>Not a gift? Click <a href="/checkout">here</a> to checkout</p>
+	    {% csrf_token %}
+	    {% for field in form %}
+	      <p>
+	        {{ field.label_tag }}<br>
+	        {{ field }}
+	        {% if field.help_text %}
+	          <small style="color: grey">{{ field.help_text }}</small>
+	        {% endif %}
+	        {% for error in field.errors %}
+	          <p style="color: red">{{ error }}</p>
+	        {% endfor %}
+	      </p>
+	    {% endfor %}
+	    {% if warning %}
+	    <p>{{warning}}</p>
+	    {% endif %}
+	    <button type="submit">Checkout</button>	
+  	</form>
+	{% if message %}
+	<p>{{message}}</p>
+	{% endif %}
 	{% endblock %}
 </body>
 </html>

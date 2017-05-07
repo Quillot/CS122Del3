@@ -82,9 +82,9 @@ CREATE TABLE content (
 CREATE TABLE delivery (
 	delivery_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
 	order_id INT NOT NULL UNIQUE,
-	recipient_id INT NOT NULL DEFAULT 1,
+	recipient_id INT DEFAULT NULL,
 	-- PRIMARY KEY (order_id, recipient_id),
-	-- gift BOOLEAN, 
+	gift BOOLEAN, 
 	FOREIGN KEY (order_id) REFERENCES orderinfo(order_id),
 	FOREIGN KEY (recipient_id) REFERENCES recipient(recipient_id)
 );	
