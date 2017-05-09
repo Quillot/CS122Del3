@@ -4,7 +4,8 @@ VALUES
 (1, 'Swiffer', 'pink', 99, 8, 20.50),
 (2, 'Swiffer', 'red', 50, 8, 20.50),
 (3, 'Swiffer', 'blue', 30, 8, 20.50),
-(4, 'Swiffer', 'black', 10, 8, 20.50);
+(4, 'Swiffer', 'black', 10, 8, 20.50),
+(5, 'Niffler', 'black', 50, 5, 40.35);
 
 INSERT INTO auth_user(id, password, last_login, is_superuser, username, first_name, 
 						last_name, email, is_staff, is_active, date_joined)

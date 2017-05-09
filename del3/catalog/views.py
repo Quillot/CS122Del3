@@ -30,8 +30,19 @@ def index(request):
 		else:
 			return HttpResponse('Not allowed to add product')
 	product_list = Product.objects.all()
+	product_selected = Product.objects.all().values('name').distinct()
+	# product_selected = Product.objects.filter(name__in=product_selected)
+	product_colors = {}
+	for product in product_selected:
+		colors = []
+		for pr in Product.objects.filter(name=product["name"]):
+			colors.append(pr.color)
+		product_colors[product["name"]] = colors
 	attribs = Product._meta.fields
-	return render(request, 'catalog/index.html', {'product_list': product_list, 'attribs': attribs})
+	return render(request, 'catalog/index.html', {'product_colors': product_colors, 
+												'product_selected': product_selected, 
+												'product_list': product_list, 
+												'attribs': attribs})
 
 def add_to_cart(request, product_id):
 	if request.user.is_authenticated():

@@ -1,19 +1,16 @@
+{% extends 'del3/base.html' %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
 	<title>Catalog</title>
-	<style>
-		table, th, td {
-			border: 1px solid black;
-		}
-	</style>
 </head>
 <body>
-	{% extends 'del3/base.html' %}
-
 	{% block content %}
+	{% if user.is_staff %}
+	<div class="container">
 	<h1>Product List</h1>
-	<table>
+	<table class="table table-responsive table-striped">
 		<tr>
 			{% for attrib in attribs %}
 			<th>{{attrib.name}}</th>
@@ -41,6 +38,7 @@
 			{% endif %}
 		</tr>
 		{% endfor %}
+	</table>
 
 		{% if user.is_staff %}
 		<a href='/catalog/add'>Add a product</a>
@@ -49,6 +47,57 @@
 		{% if warning %}
 		<p>{{warning}}</p>
 		{% endif %}
+	</div>
+
+	{% elif not user.is_staff %}
+	<div class="container">
+		<div class="row mtop50">
+		{% for product in product_list %}
+			<div class="col-md-5 col-md-offset-1">
+				<img src="http://assets.inhabitat.com/files/swiffer2.jpg" width="300px"></img>
+				<p class="mp0">{{product.name}}</p>
+				<p class="mp0">Php {{product.price}}</p>
+				<p class="mp0">{{product.color}}</p>
+				<p class="mp0">{{product.quantity_stocked}} in stock</p>
+				<a class="btn-primary add_to_cart" href="{% url 'catalog:add_to_cart' product_id=product.pk %}">Add to Cart</a>
+			</div>
+			{% if forloop.counter|divisibleby:2 %}
+		</div>
+		<div class="row mtop50">
+			{% endif %}
+		{% endfor %}
+		</div>
+		
+		<!-- <div class="row mtop50">
+		{% for product, color in product_colors.items %}
+		{% for individual_product in product_selected %}
+		{% if individual_product.name == product %}
+		<div class="col-md-5 col-md-offset-1">
+			<img src="http://assets.inhabitat.com/files/swiffer2.jpg" width="300px"></img>
+			<p class="mp0">{{individual_product.name}}</p>
+			<p class="mp0">{{individual_product.price}}</p>
+			<table class="table table-responsive table-striped mp0">
+			<tr>
+			{% for individual_color in color %}
+				<th>{{individual_color}}</th>
+			{% endfor %}
+			</tr>
+			<tr>
+			{% for producx in product_list %}
+				{% if producx.name == individual_product.name %}
+					<td> {{producx.quantity_stocked}}</td>
+				{% endif %}
+			{% endfor %}
+			</tr>
+		{% endif %}
+		{% endfor %}
+		</table>
+		</div>
+		{% endfor %}
+		</div> -->
+
+	</div>
+	{% endif %}
 	{% endblock %}
 </body>
 </html>
