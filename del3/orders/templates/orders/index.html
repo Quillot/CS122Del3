@@ -19,8 +19,8 @@
 </head>
 <body>
 	{% extends 'del3/base.html' %}
-
 	{% block content %}
+	{% if request.user.is_staff %}
 	<div class="container">
 	<h1>Order List</h1>
 	<table class="table table-responsive table-striped">
@@ -110,6 +110,35 @@
 		{% endif %}
 		{% endfor %}
 	</div>
+	{% elif request.user.is_authenticated %}
+	<div class="container">
+		<h1>Your Orders</h1>
+		<table class="table table-responsive table-striped">
+		<tr>
+			<th>order id</th>
+			<th>product id</th>
+			<th>name</th>
+			<th>color</th>
+			<th>personalization</th>
+			<th>quantity ordered</th>
+			<th>discount</th>
+		</tr>
+		{% for content in content_list %}
+		{% if content.order_id.cart_ready == True and content.order_id.issue_date %}
+		<tr>
+			<td>{{content.order_id}}</td>
+			<td>{{content.product_id}}</td>
+			<td>{{content.product_id.name}}</td>
+			<td>{{content.product_id.color}}</td>
+			<td>{{content.personalization}}</td>
+			<td>{{content.quantity_ordered}}</td>
+			<td>{{content.discount}}</td>
+		</tr>
+		{% endif %}
+		{% endfor %}
+	</table>
+	</div>
+	{% endif %}
 	{% endblock %}
 </body>
 </html>

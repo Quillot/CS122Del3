@@ -4,7 +4,6 @@ from .models import OrderInfo, Content, Delivery
 
 from django.contrib.admin.views.decorators import staff_member_required
 
-@staff_member_required
 def index(request):
 	order_list = OrderInfo.objects.all()
 	order_attribs = OrderInfo._meta.fields
