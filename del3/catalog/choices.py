@@ -4,8 +4,7 @@ COLOR_CHOICES = (
 	('yellow', ("yellow")),
 	('green', ("green")),
 	('blue', ("blue")),
-	('indigo', ("indigo")),
-	('violet', ("violet")),
+	('purple', ("purple")),
 	('black', ("black")),
 	('pink', ("pink"))
 )

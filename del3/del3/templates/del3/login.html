@@ -1,7 +1,7 @@
 {% extends 'del3/base.html' %}
 {% block content %}
   <form class="navbar-form navbar-left" method="post" autocomplete="off" role="presentation">
-    <h2>Login</h2>
+    <h2 class="mtop0">Login</h2>
     {% csrf_token %}
     {% for field in form %}
       <p>
@@ -18,6 +18,6 @@
     {% if warning %}
     <p>{{warning}}</p>
     {% endif %}
-    <button type="submit">Login</button>
+    <button type="submit" class="btn-primary">Login</button>
   </form>
 {% endblock %}

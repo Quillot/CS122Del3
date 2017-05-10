@@ -1,19 +1,25 @@
-{% extends 'del3/base.html' %}
-{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
 	<title>Catalog</title>
+	<style>
+		table, th, td {
+			border: 1px solid black;
+		}
+	</style>
 </head>
 <body>
+	{% extends 'del3/base.html' %}
+	{% load static %}
+	{% load verbose_names %}
 	{% block content %}
-	{% if user.is_staff %}
 	<div class="container">
-	<h1>Product List</h1>
+	<h1 class=" mtop0 text-center">Product List</h1>
+	{% if user.is_staff %}
 	<table class="table table-responsive table-striped">
 		<tr>
 			{% for attrib in attribs %}
-			<th>{{attrib.name}}</th>
+			<th>{% get_verbose_field attrib.name %}</th>
 			{% endfor %}
 			{% if user.is_staff %}
 			<th>Delete</th>
@@ -46,49 +52,68 @@
 
 		{% if warning %}
 		<p>{{warning}}</p>
-		{% endif %}
 	</div>
+	{% endif %}
 
 	{% elif not user.is_staff %}
 	<div class="container">
-		<div class="row mtop50">
+		<div class="row">
 		{% for product in product_list %}
-			<div class="col-md-5 col-md-offset-1">
-				<img src="http://assets.inhabitat.com/files/swiffer2.jpg" width="300px"></img>
+			<div class="col-md-4">
+				<img src="http://www.thecoloringshop.com/wp-content/uploads/2015/12/All-Star-Hardcover-Notebook-for-Gift-Stationery-diary-color-page-notepad-with-Metal-Cover-3.jpg" width="300px"></img>
 				<p class="mp0">{{product.name}}</p>
 				<p class="mp0">Php {{product.price}}</p>
 				<p class="mp0">{{product.color}}</p>
 				<p class="mp0">{{product.quantity_stocked}} in stock</p>
+				{% if user.is_authenticated %}
 				<a class="btn-primary add_to_cart" href="{% url 'catalog:add_to_cart' product_id=product.pk %}">Add to Cart</a>
+				{% endif %}
 			</div>
-			{% if forloop.counter|divisibleby:2 %}
+			{% if forloop.counter|divisibleby:3 %}
 		</div>
 		<div class="row mtop50">
 			{% endif %}
 		{% endfor %}
 		</div>
 		
-		<!-- <div class="row mtop50">
+		<!-- <div class="row">
 		{% for product, color in product_colors.items %}
 		{% for individual_product in product_selected %}
 		{% if individual_product.name == product %}
-		<div class="col-md-5 col-md-offset-1">
-			<img src="http://assets.inhabitat.com/files/swiffer2.jpg" width="300px"></img>
-			<p class="mp0">{{individual_product.name}}</p>
-			<p class="mp0">{{individual_product.price}}</p>
-			<table class="table table-responsive table-striped mp0">
-			<tr>
-			{% for individual_color in color %}
-				<th>{{individual_color}}</th>
-			{% endfor %}
-			</tr>
-			<tr>
-			{% for producx in product_list %}
+		<div class="col-md-6">
+			<img src="{% static 'images/product_icon.png' %}" width="100%"></img>
+			<h3 class="mp0">{{individual_product.name}}</h3>
+
+			<table class="table table-responsive table-striped">
+			<form method="post">
+				{% csrf_token %}
+				<select name="product_color">
+					{% for individual_color in color %}
+					<option value="{{individual_color}}">{{individual_color}}</option>
+					{% endfor %}
+				</select>
+				<tr>
+				{% for individual_color in color %}
+					<th>{{individual_color}}</th>
+				{% endfor %}
+				</tr>
+				<tr>
+				{% for producx in product_list %}
 				{% if producx.name == individual_product.name %}
 					<td> {{producx.quantity_stocked}}</td>
 				{% endif %}
-			{% endfor %}
-			</tr>
+				{% endfor %}
+				</tr>
+				<tr>
+				{% for producx in product_list %}
+				{% if producx.name == individual_product.name %}
+					<td> P{{producx.price}}</td>
+				{% endif %}
+				{% endfor %}	
+				</tr>
+				<input type="text" placeholder="Qty" value="5" name="quantity_ordered" class="add_to_cart mleft30percent">
+				<button type="submit" class="btn-primary" style="margin-left: 10px">Add to Cart</button>
+			</form>
 		{% endif %}
 		{% endfor %}
 		</table>

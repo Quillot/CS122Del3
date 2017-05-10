@@ -12,3 +12,8 @@ class ProductForm(forms.Form):
 	class Meta:
 		model = Product
 		fields = ('name', 'color', 'quantity_stocked', 'personalization_limit', 'price')
+
+class AddProductForm(forms.Form):
+	quantity = forms.IntegerField(min_value=1, max_value=99)
+	color = forms.ChoiceField(choices=COLOR_CHOICES)
+	personalization = forms.CharField(max_length=250, required=False)

@@ -10,28 +10,37 @@
 </head>
 <body>
 	{% extends 'del3/base.html' %}
+	{% load verbose_names %}
 
 	{% block content %}
-	<h1>Agent List</h1>
-	{% if user.is_staff %}
-	<a href="{% url 'agents:generate' %}">Generate Code</a>
-	{% endif %}
-	{% if code %}
-	<p>Generated code is: {{code}}. Please enter this code into the agent code field on the agent sign up page.</p>
-	{% endif %}
-	<table>
+	<div class="container">
+	<h1 class="mtop0 text-center">Agent List</h1>
+	{% if not user.is_staff %}
+		<div class="row">
+		{% for agent in agent_list %}
+			<div class="col-md-6 mbot50">
+				<img src="http://www.thecoloringshop.com/wp-content/uploads/2015/12/All-Star-Hardcover-Notebook-for-Gift-Stationery-diary-color-page-notepad-with-Metal-Cover-3.jpg" width="100%"></img>
+				<p class="mp0">{{agent.agent_id.first_name}} {{agent.agent_id.last_name}}</p>
+				<p class="mp0">{{agent.total_transactions}} total transactions</p>
+			</div>
+			{% if forloop.counter|divisibleby:2 %}
+		</div>
+		<div class="row">
+			{% endif %}
+		{% endfor %}
+
+	{% elif user.is_staff %}
+	<table class="table table-responsive table-striped">
 		<tr>
 			{% for attrib in attribs|slice:":1"%}
-			<th>{{attrib.name}}</th>
+			<th>{% get_verbose_field attrib.name %}</th>
 			{% endfor %}
 			<th>First Name</th>
 			<th>Last Name</th>
 			{% for attrib in attribs|slice:"1:"%}
-			<th>{{attrib.name}}</th>
+			<th>{% get_verbose_field attrib.name %}</th>
 			{% endfor %}
-			{% if user.is_staff %}
-			<th>Delete</th>
-			{% endif %}
+			<th>Remove</th>
 		</tr>
 		{% for agent in agent_list %}
 		<tr>
@@ -45,6 +54,34 @@
 		</tr>
 		{% endfor %}
 	</table>
+	{% if show_button %}
+	<a href="{% url 'agents:approve' %}">Approve orders</a>
+	{% endif %}
+
+	<h1 class="text-center mtop0">Code List</h1>
+	<table class="table table-responsive table-striped">
+	<tr>
+		<th>Invite ID</th>
+		<th>Code</th>
+		<th>Used</th>
+	</tr>
+	{% for code in codes %}
+	<tr>
+		<td>{{code.invite_id}}</td>
+		<td>{{code.invite_code}}</td>
+		<td>{{code.used}}</td>
+	</tr>
+	{% endfor %}
+	</table>
+
+	<a href="{% url 'agents:generate' %}">Generate Code</a>
+	{% endif %}
+	
+	{% if code %}
+	<p>Generated code is: {{code}}. Please enter this code into the agent code field on the agent sign up page.</p>
+	{% endif %}
+
+	</div>
 	{% endblock %}
 </body>
 </html>

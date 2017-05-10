@@ -34,6 +34,7 @@ class OrderInfo(models.Model):
 		return str(self.order_id)
 
 	class Meta:
+		ordering = ['order_id', 'customer_id']
 		app_label = 'orders'
 		db_table = 'orderinfo'
 
@@ -49,6 +50,7 @@ class Content(models.Model):
 		return str(self.content_id)
 
 	class Meta:
+		ordering = ['order_id', 'product_id']
 		app_label = 'orders'
 		db_table = 'content'
 
@@ -62,5 +64,6 @@ class Delivery(models.Model):
 		return str(self.delivery_id)
 
 	class Meta:
+		ordering = ['order_id']
 		app_label = 'orders'
 		db_table = 'delivery'

@@ -113,30 +113,34 @@ def set_passwords(request):
 def cart(request):
 	form = CartForm()
 	if request.user.is_authenticated():
-		if request.method == 'POST' and OrderInfo.objects.filter(customer_id=request.user.id, issue_date=None, cart_ready=False).exists():
-			form = CartForm(request.POST)
-			if form.is_valid():
-				recipient = form.save()
+		try:
+			agent = Agent.objects.get(agent_id=request.user.pk)
+			return HttpResponseRedirect(reverse('index'))
+		except Agent.DoesNotExist:
+			if request.method == 'POST' and OrderInfo.objects.filter(customer_id=request.user.id, issue_date=None, cart_ready=False).exists():
+				form = CartForm(request.POST)
+				if form.is_valid():
+					recipient = form.save()
+					user_cart = OrderInfo.objects.get(customer_id=request.user.id, issue_date=None, cart_ready=False)
+					content_list = Content.objects.filter(order_id=user_cart)
+					user_cart.cart_ready = True
+					user_cart.save()
+					delivery = Delivery(order_id=user_cart, recipient_id=recipient)
+					delivery.save()
+					request.session['message'] = "Checkout Successful!"
+					return redirect('cart')	
+			try:
 				user_cart = OrderInfo.objects.get(customer_id=request.user.id, issue_date=None, cart_ready=False)
 				content_list = Content.objects.filter(order_id=user_cart)
-				user_cart.cart_ready = True
-				user_cart.save()
-				delivery = Delivery(order_id=user_cart, recipient_id=recipient)
-				delivery.save()
-				request.session['message'] = "Checkout Successful!"
-				return redirect('cart')	
-		try:
-			user_cart = OrderInfo.objects.get(customer_id=request.user.id, issue_date=None, cart_ready=False)
-			content_list = Content.objects.filter(order_id=user_cart)
-			request.session['message'] = ""
-		except OrderInfo.DoesNotExist:
-			user_cart = None
-			content_list = None
-		content_attribs = Content._meta.fields
-		if 'message' in request.session:
-			message = request.session['message']
-			return render(request, 'del3/cart.html', {'content_attribs': content_attribs, 'content_list': content_list, 'message': message, 'form': form})
-		return render(request, 'del3/cart.html', {'content_attribs': content_attribs, 'content_list': content_list, 'form': form})
+				request.session['message'] = ""
+			except OrderInfo.DoesNotExist:
+				user_cart = None
+				content_list = None
+			content_attribs = Content._meta.fields
+			if 'message' in request.session:
+				message = request.session['message']
+				return render(request, 'del3/cart.html', {'content_attribs': content_attribs, 'content_list': content_list, 'message': message, 'form': form})
+			return render(request, 'del3/cart.html', {'content_attribs': content_attribs, 'content_list': content_list, 'form': form})
 	else:
 		return HttpResponseRedirect(reverse('index'))
 
@@ -146,6 +150,8 @@ def checkout(request):
 			pass		
 		elif OrderInfo.objects.filter(customer_id=request.user.id, issue_date=None, cart_ready=False).exists():
 			#when recipient is self
+			customer = Customer.objects.get(customer_id=request.user.id)
+			agent = Agent.objects.get(agent_id=customer.agent_id.agent_id)
 			recipient = Recipient()
 			user_cart = OrderInfo.objects.get(customer_id=request.user.id, issue_date=None, cart_ready=False)
 			content_list = Content.objects.filter(order_id=user_cart)
@@ -160,6 +166,8 @@ def checkout(request):
 			recipient.save()
 			delivery = Delivery(delivery_id = user_cart.order_id, order_id=user_cart, recipient_id=recipient)
 			delivery.save()
+			agent.total_transactions += 1
+			agent.save()
 			request.session['message'] = "Checkout Successful!"
 			return redirect('cart')	
 		else:

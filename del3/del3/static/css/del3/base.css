@@ -3,6 +3,58 @@
 	padding: 0;
 }
 
+.p0 {
+	padding: 0;
+}
+
+.mtop0 {
+	margin-top: 0;
+}
 .mtop50 {
 	margin-top: 50px;
+}
+
+h1 {
+	margin-bottom: 30px;
+}
+
+.mleft15 {
+	margin-left: 15px;
+}
+
+.mleft20 {
+	margin-left: 20px;
+}
+
+.mleft20percent {
+	margin-left: 25%;
+}
+.mleft30percent {
+	margin-left: 30%;
+}
+
+.mbot0 {
+	margin-bottom: 0;
+}
+.mbot50 {
+	margin-bottom: 50px;
+}
+
+.border {
+	border-bottom: 1px solid black;
+}
+
+.center {
+	float: none;
+	margin: 0 auto;
+}
+
+/*CSS for catalog/index.html*/
+.add_to_cart {
+	width: 50px;
+	height: 25px;
+}
+
+.test{
+	color: red;
 }

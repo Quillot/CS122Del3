@@ -49,11 +49,11 @@ VALUES
 
 INSERT INTO invite(invite_id, invite_code, used)
 VALUES
-(1, 1, 0),
-(2, 2, 0),
-(3, 3, 0),
-(4, 4, 0),
-(5, 5, 0);
+(1, 111, 0),
+(2, 222, 0),
+(3, 333, 0),
+(4, 444, 0),
+(5, 555, 0);
 
 
 INSERT INTO feature(product_id, feature_desc)
@@ -63,9 +63,9 @@ VALUES
 (3, 'Good Swiffs'),
 (4, 'Best Swiffs');
 
-INSERT INTO delivery(delivery_id, order_id, recipient_id)
+INSERT INTO delivery(delivery_id, order_id, recipient_id, gift)
 VALUES
-(1, 1, 1),
-(2, 2, 1),
-(3, 3, 2),
-(5, 5, 1);
+(1, 1, 1, 0),
+(2, 2, 1, 0),
+(3, 3, 2, 0),
+(5, 5, 1, 0);

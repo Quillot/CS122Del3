@@ -1,7 +1,8 @@
 {% extends 'del3/base.html' %}
 {% block content %}
   <form class="navbar-form navbar-left" method="post" autocomplete="off" role="presentation">
-    <h2>Sign up</h2>
+  <div class="container">
+    <h2 class="mtop0">Sign up</h2>
     <p>Have an agent code? <a href="/signupagent">Click here to sign up</a></p>
     {% csrf_token %}
     {% for field in form %}
@@ -16,6 +17,7 @@
         {% endfor %}
       </p>
     {% endfor %}
-    <button type="submit">Sign up</button>
+    <button type="submit" class="btn-primary  ">Sign up</button>
+  </div>
   </form>
 {% endblock %}

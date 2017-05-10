@@ -4,46 +4,41 @@
 	<title>Orders</title>
 
 	<style>
-		* {
-			padding: 0;
-			margin: 0;
-		}
 		table, th, td {
 			border: 1px solid black;
-		}
-		h1 {
-			text-align: center;
-			padding-bottom: 10px;
 		}
 	</style>
 </head>
 <body>
 	{% extends 'del3/base.html' %}
+	{% load verbose_names %}
 	{% block content %}
 	{% if request.user.is_staff %}
 	<div class="container">
-	<h1>Order List</h1>
+	<h1 class="mtop0 text-center">Order List</h1>
 	<table class="table table-responsive table-striped">
 		<tr>
 			{% for attrib in order_attribs|slice:":3" %}
-			<th>{{attrib.name}}</th>
+			<th>{% get_verbose_field attrib.name %}</th>
 			{% endfor %}
-			<th>recipient</th>
+			<th>Recipient</th>
+			<th>Recipient Name</th>
 			{% for attrib in order_attribs|slice:"3:7" %}
-			<th>{{attrib.name}}</th>
+			<th>{% get_verbose_field attrib.name %}</th>
 			{% endfor %}
-			<th>summary</th>
+			<th>Summary</th>
 		</tr>
 		{% for order in order_list %}
 		{% if order.issue_date != None %}
 		<tr>
 			<td>{{order.order_id}}</td>
-			<td>{{order.agent_id}}</td>
+			<td>{{order.agent_id.pk}}</td>
 			<td >{{order.customer_id.pk}}</td>
 			
 			{% for delivery in delivery_list %}
 			{% if order.pk == delivery.pk %}
 			<td>{{delivery.recipient_id}}</td>
+			<td>{{delivery.recipient_id.first_name}} {{delivery.recipient_id.last_name}}</td>
 			{% endif %}
 			{% endfor %}
 			
@@ -54,7 +49,7 @@
 
 			{% for delivery in delivery_list %}
 			{% if order.pk == delivery.pk %}
-			<td>Agent {{order.agent_id}} {{order.agent_id.first_name}} in charge of Order {{order.order_id}} sent to Recipient {{delivery.recipient_id}} {{delivery.recipient_id.first_name}}</td>
+			<td>Agent {{order.agent_id}} {{order.agent_id.first_name}} has approved Order {{order.order_id}} sent to Recipient {{delivery.recipient_id}} {{delivery.recipient_id.first_name}}</td>
 			{% endif %}
 			{% endfor %}
 				
@@ -62,16 +57,18 @@
 		{% endif %}
 		{% endfor %}
 	</table>
-	<h1>Order Contents</h1>
+
+	<h1 class="mtop0 text-center">Order Contents</h1>
 	<table class="table table-responsive table-striped">
 		<tr>
-			<th>order id</th>
-			<th>product id</th>
-			<th>name</th>
-			<th>color</th>
-			<th>personalization</th>
-			<th>quantity ordered</th>
-			<th>discount</th>
+			{% for content_attrib in content_attribs|slice:"1:3" %}
+			<th>{% get_verbose_field content_attrib.name %}</th>
+			{% endfor %}
+			<th>Product Name</th>
+			<th>Color</th>
+			{% for content_attrib in content_attribs|slice:"3:" %}
+			<th>{% get_verbose_field content_attrib.name %}</th>
+			{% endfor %}
 		</tr>
 		{% for content in content_list %}
 		{% if content.order_id.cart_ready == True and content.order_id.issue_date %}
@@ -87,22 +84,62 @@
 		{% endif %}
 		{% endfor %}
 	</table>
-	<h1>Cart Contents</h1>
+
+	<h1 class="mtop0 text-center">Pending Order List</h1>
 	<table class="table table-responsive table-striped">
 		<tr>
-			{% for content_attrib in content_attribs|slice:":3" %}
-			<th>{{content_attrib.name}}</th>
+			{% for attrib in order_attribs|slice:":3" %}
+			<th>{{attrib.name}}</th>
 			{% endfor %}
+			<th>recipient</th>
+			{% for attrib in order_attribs|slice:"7:7" %}
+			<th>{{attrib.name}}</th>
+			{% endfor %}
+			<th>summary</th>
+		</tr>
+		{% for order in order_list %}
+		{% if order.issue_date == None and order.cart_ready %}
+		<tr>
+			<td>{{order.order_id}}</td>
+			<td>{{order.agent_id}}</td>
+			<td >{{order.customer_id.pk}}</td>
+			
+			{% for delivery in delivery_list %}
+			{% if order.pk == delivery.pk %}
+			<td>{{delivery.recipient_id}}</td>
+			{% endif %}
+			{% endfor %}
+
+			{% for delivery in delivery_list %}
+			{% if order.pk == delivery.pk %}
+			<td>Agent {{order.agent_id}} {{order.agent_id.first_name}} has not accepted Order {{order.order_id}} to be sent to Recipient {{delivery.recipient_id}} {{delivery.recipient_id.first_name}}</td>
+			{% endif %}
+			{% endfor %}
+				
+		</tr>
+		{% endif %}
+		{% endfor %}
+	</table>
+
+	<h1 class="mtop0 text-center">Pending Contents</h1>
+	<table class="table table-responsive table-striped">
+		<tr>
+			{% for content_attrib in content_attribs|slice:"1:3" %}
+			<th>{% get_verbose_field content_attrib.name %}</th>
+			{% endfor %}
+			<th>Product Name</th>
+			<th>Color</th>
 			{% for content_attrib in content_attribs|slice:"3:" %}
-			<th>{{content_attrib.name}}</th>
+			<th>{% get_verbose_field content_attrib.name %}</th>
 			{% endfor %}
 		</tr>
 		{% for content in content_list %}
 		{% if content.order_id.cart_ready == True and not content.order_id.issue_date %}
 		<tr>
-			<td>{{content.content_id}}</td>
 			<td>{{content.order_id}}</td>
 			<td>{{content.product_id}}</td>
+			<td>{{content.product_id.name}}</td>
+			<td>{{content.product_id.color}}</td>
 			<td>{{content.personalization}}</td>
 			<td>{{content.quantity_ordered}}</td>
 			<td>{{content.discount}}</td>
@@ -112,19 +149,47 @@
 	</div>
 	{% elif request.user.is_authenticated %}
 	<div class="container">
-		<h1>Your Orders</h1>
+		<h1 class="mtop0 text-center">Your Delivered Orders</h1>
 		<table class="table table-responsive table-striped">
 		<tr>
-			<th>order id</th>
-			<th>product id</th>
-			<th>name</th>
-			<th>color</th>
-			<th>personalization</th>
-			<th>quantity ordered</th>
-			<th>discount</th>
+			{% for attrib in content_attribs|slice:"1:3" %}
+			<th>{% get_verbose_field attrib.name %}</th>
+			{% endfor %}
+			<th>Product Name</th>
+			<th>Color</th>
+			{% for attrib in content_attribs|slice:"3:" %}
+			<th>{% get_verbose_field attrib.name %}</th>
+			{% endfor %}
 		</tr>
 		{% for content in content_list %}
 		{% if content.order_id.cart_ready == True and content.order_id.issue_date %}
+		<tr>
+			<td>{{content.order_id}}</td>
+			<td>{{content.product_id}}</td>
+			<td>{{content.product_id.name}}</td>
+			<td>{{content.product_id.color}}</td>
+			<td>{{content.personalization}}</td>
+			<td>{{content.quantity_ordered}}</td>
+			<td>{{content.discount}}</td>
+		</tr>
+		{% endif %}
+		{% endfor %}
+	</table>
+
+	<h1 class="mtop0 text-center">Your Pending Orders</h1>
+		<table class="table table-responsive table-striped">
+		<tr>
+			{% for attrib in content_attribs|slice:"1:3" %}
+			<th>{% get_verbose_field attrib.name %}</th>
+			{% endfor %}
+			<th>Product Name</th>
+			<th>Color</th>
+			{% for attrib in content_attribs|slice:"3:" %}
+			<th>{% get_verbose_field attrib.name %}</th>
+			{% endfor %}
+		</tr>
+		{% for content in content_list %}
+		{% if content.order_id.cart_ready == True and not content.order_id.issue_date %}
 		<tr>
 			<td>{{content.order_id}}</td>
 			<td>{{content.product_id}}</td>

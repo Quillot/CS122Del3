@@ -10,6 +10,20 @@ DROP TABLE recipient;
 DROP TABLE customer;
 DROP TABLE agent;
 
+-- CREATE table auth_user (
+-- 	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
+-- 	password VARCHAR(255) NOT NULL,
+-- 	last_login DATETIME,
+-- 	is_superuser BOOLEAN NOT NULL,
+-- 	username VARCHAR(30) NOT NULL,
+-- 	first_name VARCHAR(30) NOT NULL,
+-- 	last_name VARCHAR(30) NOT NULL,
+-- 	email VARCHAR(254) NOT NULL,
+-- 	is_staff BOOLEAN NOT NULL,
+-- 	is_active BOOLEAN NOT NULL,
+-- 	date_joined DATETIME NOT NULL
+-- );
+
 CREATE TABLE agent (
 	agent_id INT NOT NULL PRIMARY KEY UNIQUE,
 	total_transactions INT NOT NULL DEFAULT 0
@@ -71,7 +85,6 @@ CREATE TABLE content (
 	content_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
 	order_id INT NOT NULL, 	
 	product_id INT NOT NULL, 
-	-- PRIMARY KEY (order_id, product_id),
 	personalization VARCHAR(255) DEFAULT "",
 	quantity_ordered INT DEFAULT 1,
 	discount FLOAT(2) DEFAULT 0.00,
@@ -83,7 +96,6 @@ CREATE TABLE delivery (
 	delivery_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
 	order_id INT NOT NULL UNIQUE,
 	recipient_id INT DEFAULT NULL,
-	-- PRIMARY KEY (order_id, recipient_id),
 	gift BOOLEAN, 
 	FOREIGN KEY (order_id) REFERENCES orderinfo(order_id),
 	FOREIGN KEY (recipient_id) REFERENCES recipient(recipient_id)

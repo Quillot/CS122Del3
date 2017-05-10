@@ -99,8 +99,8 @@ def insert_contents(cart, product):
 		contents.discount = 0.00
 	contents.save()
 
-	product.quantity_stocked -= 10
-	product.save()
+	# product.quantity_stocked -= 10
+	# product.save()
 
 	return contents
 

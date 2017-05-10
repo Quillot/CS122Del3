@@ -19,20 +19,19 @@
 </head>
 <body>
 	{% extends 'del3/base.html' %}
-
 	{% block content %}
+	{% load verbose_names %}
 	<div class="container">
-	<h1>Your cart</h1>
+	<h1 class="mtop0 text-center p0">Your cart</h1>
 	<table class="table table-responsive table-striped">
 		<tr>
-			{% for attrib in content_attribs %}
-			<th>{{attrib.name}}</th>
+			{% for attrib in content_attribs|slice:"1:" %}
+			<th>{% get_verbose_field attrib.name %}</th>
 			{% endfor %}
 		</tr>
 
 		{% for content in content_list %}
 		<tr>
-			<td>{{content.content_id}}</td>
 			<td>{{content.order_id}}</td>
 			<td>{{content.product_id}}</td>
 			<td>{{content.personalization}}</td>
