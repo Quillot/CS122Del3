@@ -15,7 +15,7 @@
 	{% block content %}
 	{% if request.user.is_staff %}
 	<div class="container">
-	<h1 class="mtop0 text-center">Order List</h1>
+	<h1 class="garamond text-center">Order List</h1>
 	<table class="table table-responsive table-striped">
 		<tr>
 			{% for attrib in order_attribs|slice:":3" %}
@@ -58,7 +58,7 @@
 		{% endfor %}
 	</table>
 
-	<h1 class="mtop0 text-center">Order Contents</h1>
+	<h1 class="garamond text-center">Order Contents</h1>
 	<table class="table table-responsive table-striped">
 		<tr>
 			{% for content_attrib in content_attribs|slice:"1:3" %}
@@ -85,7 +85,7 @@
 		{% endfor %}
 	</table>
 
-	<h1 class="mtop0 text-center">Pending Order List</h1>
+	<h1 class="garamond text-center">Pending Order List</h1>
 	<table class="table table-responsive table-striped">
 		<tr>
 			{% for attrib in order_attribs|slice:":3" %}
@@ -121,7 +121,7 @@
 		{% endfor %}
 	</table>
 
-	<h1 class="mtop0 text-center">Pending Contents</h1>
+	<h1 class="garamond text-center">Pending Contents</h1>
 	<table class="table table-responsive table-striped">
 		<tr>
 			{% for content_attrib in content_attribs|slice:"1:3" %}
@@ -149,7 +149,7 @@
 	</div>
 	{% elif request.user.is_authenticated %}
 	<div class="container">
-		<h1 class="mtop0 text-center">Your Delivered Orders</h1>
+		<h1 class="garamond text-center">Your Delivered Orders</h1>
 		<table class="table table-responsive table-striped">
 		<tr>
 			{% for attrib in content_attribs|slice:"1:3" %}
@@ -176,7 +176,7 @@
 		{% endfor %}
 	</table>
 
-	<h1 class="mtop0 text-center">Your Pending Orders</h1>
+	<h1 class="garamond text-center">Your Pending Orders</h1>
 		<table class="table table-responsive table-striped">
 		<tr>
 			{% for attrib in content_attribs|slice:"1:3" %}
@@ -187,6 +187,9 @@
 			{% for attrib in content_attribs|slice:"3:" %}
 			<th>{% get_verbose_field attrib.name %}</th>
 			{% endfor %}
+			{% if is_agent %}
+			<th>Approve Order</th>
+			{% endif %}
 		</tr>
 		{% for content in content_list %}
 		{% if content.order_id.cart_ready == True and not content.order_id.issue_date %}
@@ -198,6 +201,9 @@
 			<td>{{content.personalization}}</td>
 			<td>{{content.quantity_ordered}}</td>
 			<td>{{content.discount}}</td>
+			{% if is_agent %}
+			<td class="text-center"><a class="text-center" href="{% url 'orders:approve_order' order_id=content.order_id.pk %}">X</a></td>
+			{% endif %}
 		</tr>
 		{% endif %}
 		{% endfor %}

@@ -23,3 +23,11 @@ class ProductForm(forms.Form):
 		product.personalization_limit = self.cleaned_data.get('personalization_limit')
 		product.price = self.cleaned_data.get('price')
 		return product
+
+class AddCartForm(forms.Form):
+	quantity = forms.IntegerField(max_value=99)
+	personalization = forms.CharField(max_length=255, required=False)
+
+	class Meta:
+		model = Product
+		fields = ('quantity', 'personalization')

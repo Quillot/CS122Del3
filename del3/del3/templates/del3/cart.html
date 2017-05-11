@@ -22,7 +22,7 @@
 	{% block content %}
 	{% load verbose_names %}
 	<div class="container">
-	<h1 class="mtop0 text-center p0">Your cart</h1>
+	<h1 class="text-center garamond">Your cart</h1>
 	<table class="table table-responsive table-striped">
 		<tr>
 			{% for attrib in content_attribs|slice:"1:" %}
@@ -43,7 +43,7 @@
 
 	<form class="navbar-form navbar-left" method="post">
 	    <h4>Enter recipient</h4>
-	    <p>Not a gift? Click <a href="/checkout">here</a> to checkout</p>
+	    <p>Not a gift? Click <a href="/checkout">here</a> to deliver to your address</p>
 	    {% csrf_token %}
 	    {% for field in form %}
 	      <p>
@@ -60,7 +60,7 @@
 	    {% if warning %}
 	    <p>{{warning}}</p>
 	    {% endif %}
-	    <button type="submit">Checkout</button>	
+	    <button type="submit" class="btn-primary">Checkout</button>	
   	</form>
 	{% if message %}
 	<p>{{message}}</p>

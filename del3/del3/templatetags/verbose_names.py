@@ -1,4 +1,5 @@
 from django import template
+from agents.models import Agent
 register = template.Library()
 
 @register.simple_tag

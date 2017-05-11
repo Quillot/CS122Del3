@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Catalog</title>
-	<style>
+	<title>Catalog</title>	<style>
 		table, th, td {
 			border: 1px solid black;
 		}
@@ -14,9 +13,9 @@
 	{% load verbose_names %}
 	{% block content %}
 	<div class="container">
-	<h1 class=" mtop0 text-center">Product List</h1>
-	{% if user.is_staff %}
-	<a href='/catalog/add'>Add a product</a>
+	{% if user.is_staff or is_agent%}
+	<h1 class="mbot0 garamond text-center">Product List</h1>
+	<a class="mp0" href='/catalog/add'>Add a product</a>
 	<table class="table table-responsive table-striped">
 		<tr>
 			{% for attrib in attribs %}
@@ -38,10 +37,7 @@
 			<td>{{product.personalization_limit}}</td>
 			<td>{{product.price}}</td>
 			{% if user.is_staff %}
-				<td><a href="{% url 'catalog:delete_product' product_id=product.pk %}">X</a></td>
-			{% endif %}
-			{% if user.is_authenticated and not user.is_staff %}
-				<td><a href="{% url 'catalog:add_to_cart' product_id=product.pk %}">X</a></td>
+				<td class="text-center"><a href="{% url 'catalog:delete_product' product_id=product.pk %}">X</a></td>
 			{% endif %}
 		</tr>
 		{% endfor %}
@@ -52,24 +48,44 @@
 		<p>{{warning}}</p>
 	</div>
 	{% endif %}
-
-	{% elif not user.is_staff %}
+	{% endif %}
+	{% if not user.is_staff %}
+	<h1 class="mbot10 garamond text-center">Product List</h1>
+	{% if warning %}
+		<p>&nbsp;&nbsp;&nbsp;&nbsp;{{warning}}</p>
+	{% endif %}
 	<div class="container">
 		<div class="row">
 		{% for product in product_list %}
 			<div class="col-md-4">
 				<img src="http://www.thecoloringshop.com/wp-content/uploads/2015/12/All-Star-Hardcover-Notebook-for-Gift-Stationery-diary-color-page-notepad-with-Metal-Cover-3.jpg" width="300px"></img>
-				<p class="mp0">{{product.name}}</p>
+				<p class="mp0"><b>{{product.name}}</b></p>
 				<p class="mp0">Php {{product.price}}</p>
 				<p class="mp0">{{product.color}}</p>
+				<p class="mp0">Personalization limit: {{product.personalization_limit}} characters</p>
+				<p class="mp0">Features:</p>
 				{% for feature in feature_list %}
 				{% if feature.product_id == product %}
-				<p class="mp0">{{feature.feature_desc}}</p>
+				<p class="mp0">&nbsp;&nbsp;{{feature.feature_desc}}</p>
 				{% endif %}
 				{% endfor %}
-				{% if user.is_authenticated %}
-				<a class="btn-primary add_to_cart" href="{% url 'catalog:add_to_cart' product_id=product.pk %}">Add to Cart</a>
-				{% endif %}
+
+				<form action="{% url 'catalog:add_to_cart' product_id=product.pk %}" id='{{forloop.counter}}' class="navbar-left" method="post" autocomplete="off" role="presentation">
+				{% csrf_token %}
+				{% for field in form %}
+					<p>
+					{{ field.label_tag }}<br>
+					{{ field }}
+					{% if field.help_text %}
+					<small style="color: grey">{{ field.help_text }}</small>
+					{% endif %}
+					{% for error in field.errors %}
+					<p style="color: red">{{ error }}</p>
+					{% endfor %}
+					</p>
+				{% endfor %}
+				<button class="btn-primary" onclick="document.getElementById('{{forloop.counter}}').submit();">Add to Cart</a>
+				</form>
 			</div>
 			{% if forloop.counter|divisibleby:3 %}
 		</div>
@@ -77,52 +93,7 @@
 			{% endif %}
 		{% endfor %}
 		</div>
-		
-		<!-- <div class="row">
-		{% for product, color in product_colors.items %}
-		{% for individual_product in product_selected %}
-		{% if individual_product.name == product %}
-		<div class="col-md-6">
-			<img src="{% static 'images/product_icon.png' %}" width="100%"></img>
-			<h3 class="mp0">{{individual_product.name}}</h3>
-
-			<table class="table table-responsive table-striped">
-			<form method="post">
-				{% csrf_token %}
-				<select name="product_color">
-					{% for individual_color in color %}
-					<option value="{{individual_color}}">{{individual_color}}</option>
-					{% endfor %}
-				</select>
-				<tr>
-				{% for individual_color in color %}
-					<th>{{individual_color}}</th>
-				{% endfor %}
-				</tr>
-				<tr>
-				{% for producx in product_list %}
-				{% if producx.name == individual_product.name %}
-					<td> {{producx.quantity_stocked}}</td>
-				{% endif %}
-				{% endfor %}
-				</tr>
-				<tr>
-				{% for producx in product_list %}
-				{% if producx.name == individual_product.name %}
-					<td> P{{producx.price}}</td>
-				{% endif %}
-				{% endfor %}	
-				</tr>
-				<input type="text" placeholder="Qty" value="5" name="quantity_ordered" class="add_to_cart mleft30percent">
-				<button type="submit" class="btn-primary" style="margin-left: 10px">Add to Cart</button>
-			</form>
-		{% endif %}
-		{% endfor %}
-		</table>
-		</div>
-		{% endfor %}
-		</div> -->
-
+	
 	</div>
 	{% endif %}
 	{% endblock %}

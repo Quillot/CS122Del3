@@ -13,24 +13,34 @@
 	{% load verbose_names %}
 
 	{% block content %}
-	<div class="container">
-	<h1 class="mtop0 text-center">Agent List</h1>
 	{% if not user.is_staff %}
-		<div class="row">
+	<h1 class="mp3">AGENT LIST</h1>
+	<div class="container mtop60">
+
+	
+		<div class="row mp10">
 		{% for agent in agent_list %}
-			<div class="col-md-6 mbot50">
-				<img src="http://www.thecoloringshop.com/wp-content/uploads/2015/12/All-Star-Hardcover-Notebook-for-Gift-Stationery-diary-color-page-notepad-with-Metal-Cover-3.jpg" width="100%"></img>
-				<p class="mp0">{{agent.agent_id.first_name}} {{agent.agent_id.last_name}}</p>
-				<p class="mp0">{{agent.total_transactions}} total transactions</p>
+			<div class="col-md-2 mp11">
+				<img width="100px" height="100px" src = "/static/css/person-icon.png"></img>
 			</div>
+			<p></p>
+			<div class="col-md-10">
+				<p class="mp1">{{agent.agent_id.first_name}} {{agent.agent_id.last_name}}</p>
+				<p class="mp2">Agent ID: {{agent.agent_id.id}}</p>
+				<p class="mp2">Total Transactions: {{agent.total_transactions}}</p>
+			</div>
+			<hr>
 			{% if forloop.counter|divisibleby:2 %}
 		</div>
-		<div class="row">
+		<div class="row mtop50">
 			{% endif %}
 		{% endfor %}
+		</div>
+	</div>
 
 	{% elif user.is_staff %}
-	<a href="{% url 'agents:generate' %}">Generate Code</a>
+	<h1 class="text-center garamond">Agent List</h1>
+	<div class="container">
 	<table class="table table-responsive table-striped">
 		<tr>
 			{% for attrib in attribs|slice:":1"%}
@@ -55,11 +65,8 @@
 		</tr>
 		{% endfor %}
 	</table>
-	{% if show_button %}
-	<a href="{% url 'agents:approve' %}">Approve orders</a>
-	{% endif %}
-
-	<h1 class="text-center mtop0">Code List</h1>
+	<h1 class="mp0 text-center garamond">Code List</h1>
+	<p class="mp0"><a href="{% url 'agents:generate' %}">Generate Code</a></p>
 	<table class="table table-responsive table-striped">
 	<tr>
 		<th>Invite ID</th>

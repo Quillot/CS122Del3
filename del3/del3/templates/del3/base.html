@@ -3,7 +3,6 @@
 <html>
 <head>
 
-	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="{% static 'css/bootstrap/css/bootstrap.css' %}"></link>
 	<link rel="stylesheet" href="{% static 'css/bootstrap/css/bootstrap-theme.css' %}"></link>
 	<link rel="stylesheet" href="{% static 'css/bootstrap/css/bootstrap.min.css' %}"></link>
@@ -13,24 +12,29 @@
 
 </head>
 <body>
-	<nav class="navbar navbar-default">
-	  <div class="container-fluid">
-	    <!-- Brand and toggle get grouped for better mobile display -->
-	    <div class="navbar-header">
-	      <a class="navbar-brand test" href="/">Pixie Dust Enterprises</a>
-	    </div>
+	<nav class="navbar-default mp0">
+	  <div class="container-fluid navigationbar">
+	  	<div class="navbar-header">
+	  		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		<a class="navbar-brand tinypixie" href="/">Pixie Dust Enterprises</a>
+		</div>
 
-	<ul class="nav navbar-nav">
-		<li><a href="/catalog">Catalog</a></li>
-		<li><a href="/agents">Agents</a></li>
+	<ul class="nav navbar-nav tinypixie2">
+		<li><a class="tinypixie4" href="/catalog">Catalog</a></li>
+		<li><a class="tinypixie4" href="/agents">Agents</a></li>
 		{% if user.is_staff %}
-		<li><a href="/customers">Customers</a></li>
+		<li><a class="tinypixie4" href="/customers">Customers</a></li>
 		{% endif %}
 		{% if user.is_authenticated %}
-			<li><a href="/orders">Orders</a></li>
+			<li><a class="tinypixie4" href="/orders">Orders</a></li>
 		{% endif %}
 		{% if user.is_staff %}
-			<li><a href="{% url 'set_passwords' %}">Set passwords</a></li>
+			<li><a class="tinypixie4" href="{% url 'set_passwords' %}">Set passwords</a></li>
 		{% endif %}
 	</ul>
 	{% if user.is_authenticated %}
@@ -38,7 +42,7 @@
 	<p class="navbar-text pull-right"><a href="/cart">Cart</a></p>
 	{% endif %}
 	<p class="navbar-text pull-right"><a href="/logout">Logout</a></p>
-	<p class="navbar-text pull-right">Logged in - {{request.user.username}}</p>
+	<p class="navbar-text pull-right tinypixie3">Logged in - {{request.user.username}}</p>
 	{% else %}
 	<p class="navbar-text pull-right"><a href="/signup">Sign up</a></p>
 	<p class="navbar-text pull-right"><a href="/login">Login</a></p>
