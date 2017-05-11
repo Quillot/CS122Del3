@@ -17,8 +17,12 @@ class Product(models.Model):
 		db_table = 'product'
 
 class Feature(models.Model):
-	product_id = models.ForeignKey(Product, primary_key=True, null=False, default=1)
+	feature_id = models.AutoField(primary_key=True)
+	product_id = models.ForeignKey(Product, db_column='product_id', null=False, default=1)
 	feature_desc = models.CharField(max_length=255, blank=False, null=False, default='')
+
+	def __str__(self):
+		return str(self.product_id)
 
 	class Meta:
 		app_label = 'catalog'

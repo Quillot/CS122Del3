@@ -30,6 +30,7 @@
 		{% endfor %}
 
 	{% elif user.is_staff %}
+	<a href="{% url 'agents:generate' %}">Generate Code</a>
 	<table class="table table-responsive table-striped">
 		<tr>
 			{% for attrib in attribs|slice:":1"%}
@@ -73,8 +74,6 @@
 	</tr>
 	{% endfor %}
 	</table>
-
-	<a href="{% url 'agents:generate' %}">Generate Code</a>
 	{% endif %}
 	
 	{% if code %}

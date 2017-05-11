@@ -11,7 +11,7 @@
 <body>
 	{% extends 'del3/base.html' %}
 	{% block content %}
-	<form action="{% url 'catalog:index' %}" method="post" class="navbar-form">
+	<form action="{% url 'catalog:add_product' %}" method="post" class="navbar-form navbar-left" autocomplete="off" role="presentation">
 		<h1 class="mp0">Add Product</h1>
 		{% csrf_token %}
 		{% for field in form %}
@@ -29,6 +29,10 @@
 	    {% if warning %}
 	    <p>{{warning}}</p>
 	    {% endif %}
+	
+	    {% for feature in formset %}
+	    	<p>{{feature.as_table}}</p>
+	    {% endfor %}
 	    <button type="submit" class="btn-primary">Submit</button>
 	</form>
 	{% endblock %}

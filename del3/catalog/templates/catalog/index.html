@@ -16,6 +16,7 @@
 	<div class="container">
 	<h1 class=" mtop0 text-center">Product List</h1>
 	{% if user.is_staff %}
+	<a href='/catalog/add'>Add a product</a>
 	<table class="table table-responsive table-striped">
 		<tr>
 			{% for attrib in attribs %}
@@ -46,9 +47,6 @@
 		{% endfor %}
 	</table>
 
-		{% if user.is_staff %}
-		<a href='/catalog/add'>Add a product</a>
-		{% endif %}
 
 		{% if warning %}
 		<p>{{warning}}</p>
@@ -64,7 +62,11 @@
 				<p class="mp0">{{product.name}}</p>
 				<p class="mp0">Php {{product.price}}</p>
 				<p class="mp0">{{product.color}}</p>
-				<p class="mp0">{{product.quantity_stocked}} in stock</p>
+				{% for feature in feature_list %}
+				{% if feature.product_id == product %}
+				<p class="mp0">{{feature.feature_desc}}</p>
+				{% endif %}
+				{% endfor %}
 				{% if user.is_authenticated %}
 				<a class="btn-primary add_to_cart" href="{% url 'catalog:add_to_cart' product_id=product.pk %}">Add to Cart</a>
 				{% endif %}

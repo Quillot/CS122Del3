@@ -63,7 +63,8 @@ CREATE TABLE product (
 );
 
 CREATE TABLE feature (
-	product_id INT NOT NULL PRIMARY KEY DEFAULT 1,
+	feature_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
+	product_id INT NOT NULL DEFAULT 1,
 	feature_desc VARCHAR(255) NOT NULL DEFAULT "",
 	FOREIGN KEY (product_id) REFERENCES product(product_id)
 );
