@@ -26,8 +26,8 @@ class SignUpForm(UserCreationForm):
 	def save(self, commit=False):
 		user = User.objects.create_user(username=self.clean_username(), password=self.cleaned_data['password1'])
 		user.email = self.clean_email()
-		user.first_name = self.cleaned_data.get('first_name')
-		user.last_name = self.cleaned_data.get('last_name')
+		user.first_name = self.cleaned_data.get('first_name').title()
+		user.last_name = self.cleaned_data.get('last_name').title()
 		fields = user._meta.fields
 		for field in fields:
 			if field is not None:
@@ -70,8 +70,8 @@ class SignUpAgentForm(UserCreationForm):
 	def save(self, commit=False):
 		user = User.objects.create_user(username=self.clean_username(), password=self.cleaned_data['password1'])
 		user.email = self.clean_email()
-		user.first_name = self.cleaned_data.get('first_name')
-		user.last_name = self.cleaned_data.get('last_name')
+		user.first_name = self.cleaned_data.get('first_name').title()
+		user.last_name = self.cleaned_data.get('last_name').title()
 		code = self.clean_code()[0]
 		if code:
 			code.used = True

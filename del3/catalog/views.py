@@ -43,48 +43,53 @@ def index(request, product_id=None):
 
 
 def add_to_cart(request, product_id):
-	if request.method == 'POST':
-		form = AddCartForm(request.POST)
-		if form.is_valid():
-			quantity = form.cleaned_data.get('quantity')
-			personalization = form.cleaned_data.get('personalization')
+	if request.user.is_authenticated():
+		if request.method == 'POST':
+			form = AddCartForm(request.POST)
+			if form.is_valid():
+				quantity = form.cleaned_data.get('quantity')
+				personalization = form.cleaned_data.get('personalization')
 
-			product = Product.objects.get(pk=product_id)
-			curr_customer = Customer.objects.get(customer_id=request.user.id)
-			orders = OrderInfo.objects.filter(customer_id=request.user.id)
+				product = Product.objects.get(pk=product_id)
+				curr_customer = Customer.objects.get(customer_id=request.user.id)
+				orders = OrderInfo.objects.filter(customer_id=request.user.id)
+				
+				if len(personalization) > product.personalization_limit:
+					warning = "Over personalization limit"
+					product_list = Product.objects.all()
+					attribs = Product._meta.fields
+					return render(request, 'catalog/index.html', {'product_list': product_list, 'attribs': attribs, 'warning': warning})
 			
-			if len(personalization) > product.personalization_limit:
-				warning = "Over personalization limit"
-				product_list = Product.objects.all()
-				attribs = Product._meta.fields
-				return render(request, 'catalog/index.html', {'product_list': product_list, 'attribs': attribs, 'warning': warning})
-		
-			if quantity <= 99:
-				if len(orders) == 0:  # If no current cart
-					#make a new cart
-					cart = create_cart(curr_customer)
-					#add the product to it
-					contents = insert_contents(cart, product, quantity, personalization)
-					return HttpResponseRedirect(reverse('catalog:index'))
-				elif len(orders) > 0:  # if there is existing cart or orders
-					x = OrderInfo.objects.filter(delivery_time=None, cart_ready=False)
-					y = set(orders).intersection(set(x))
-					if len(y) > 0:  # if there is existing cart
-						contents = insert_contents(y.pop(), product, quantity, personalization)
-						return HttpResponseRedirect(reverse('catalog:index'))
-					else:
+				if quantity <= 99:
+					if len(orders) == 0:  # If no current cart
+						#make a new cart
 						cart = create_cart(curr_customer)
+						#add the product to it
 						contents = insert_contents(cart, product, quantity, personalization)
 						return HttpResponseRedirect(reverse('catalog:index'))
+					elif len(orders) > 0:  # if there is existing cart or orders
+						x = OrderInfo.objects.filter(delivery_time=None, cart_ready=False)
+						y = set(orders).intersection(set(x))
+						if len(y) > 0:  # if there is existing cart
+							contents = insert_contents(y.pop(), product, quantity, personalization)
+							return HttpResponseRedirect(reverse('catalog:index'))
+						else:
+							cart = create_cart(curr_customer)
+							contents = insert_contents(cart, product, quantity, personalization)
+							return HttpResponseRedirect(reverse('catalog:index'))
+				else:
+					warning = "Please choose below 99"
+					product_list = Product.objects.all()
+					attribs = Product._meta.fields
+					return render(request, 'catalog/index.html', {'product_list': product_list, 'attribs': attribs, 'warning': warning})
 			else:
-				warning = "Please choose below 99"
-				product_list = Product.objects.all()
-				attribs = Product._meta.fields
-				return render(request, 'catalog/index.html', {'product_list': product_list, 'attribs': attribs, 'warning': warning})
+				return HttpResponseRedirect(reverse('catalog:index'))
 		else:
 			return HttpResponseRedirect(reverse('catalog:index'))
 	else:
-		return HttpResponseRedirect(reverse('catalog:index'))
+		return HttpResponseRedirect(reverse('signup'))
+
+
 
 def create_cart(customer):
 	cart = OrderInfo()

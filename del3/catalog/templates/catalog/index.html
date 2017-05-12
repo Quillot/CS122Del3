@@ -13,9 +13,11 @@
 	{% load verbose_names %}
 	{% block content %}
 	<div class="container">
-	{% if user.is_staff or is_agent%}
+	{% if user.is_staff or is_agent %}
 	<h1 class="mbot0 garamond text-center">Product List</h1>
+	{% if user.is_staff %}
 	<a class="mp0" href='/catalog/add'>Add a product</a>
+	{% endif %}
 	<table class="table table-responsive table-striped">
 		<tr>
 			{% for attrib in attribs %}
@@ -23,9 +25,6 @@
 			{% endfor %}
 			{% if user.is_staff %}
 			<th>Delete</th>
-			{% endif %}
-			{% if user.is_authenticated and not user.is_staff %}
-			<th>Add to cart</th>
 			{% endif %}
 		</tr>
 		{% for product in product_list %}
@@ -49,7 +48,7 @@
 	</div>
 	{% endif %}
 	{% endif %}
-	{% if not user.is_staff %}
+	{% if not user.is_staff and not is_agent%}
 	<h1 class="mbot10 garamond text-center">Product List</h1>
 	{% if warning %}
 		<p>&nbsp;&nbsp;&nbsp;&nbsp;{{warning}}</p>

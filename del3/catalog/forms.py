@@ -25,7 +25,7 @@ class ProductForm(forms.Form):
 		return product
 
 class AddCartForm(forms.Form):
-	quantity = forms.IntegerField(max_value=99)
+	quantity = forms.IntegerField(min_value = 1, max_value=99)
 	personalization = forms.CharField(max_length=255, required=False)
 
 	class Meta:

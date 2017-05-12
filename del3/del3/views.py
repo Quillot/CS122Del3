@@ -174,4 +174,7 @@ def checkout(request):
 			request.session['message'] = "No items in cart"
 			return redirect('cart')
 			
-		
+def delete_cart_entry(request, content_id):
+	content = Content.objects.get(pk=content_id)
+	content.delete()
+	return HttpResponseRedirect(reverse('cart'))	
