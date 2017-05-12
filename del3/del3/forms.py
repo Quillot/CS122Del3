@@ -22,7 +22,7 @@ class SignUpForm(UserCreationForm):
 		model = User
 		fields = ('username', 'first_name', 'last_name', 'password1', 
 			'password2', 'email', 'agent', 'street', 'city', 'country')
-#
+
 	def save(self, commit=False):
 		user = User.objects.create_user(username=self.clean_username(), password=self.cleaned_data['password1'])
 		user.email = self.clean_email()
@@ -70,8 +70,8 @@ class SignUpAgentForm(UserCreationForm):
 	def save(self, commit=False):
 		user = User.objects.create_user(username=self.clean_username(), password=self.cleaned_data['password1'])
 		user.email = self.clean_email()
-		user.first_name = self.cleaned_data.get('first_name').title()
-		user.last_name = self.cleaned_data.get('last_name').title()
+		user.first_name = self.cleaned_data.get('first_name')
+		user.last_name = self.cleaned_data.get('last_name')
 		code = self.clean_code()[0]
 		if code:
 			code.used = True
@@ -118,17 +118,20 @@ class CartForm(forms.Form):
 	country = forms.CharField(max_length=255, required=True)
 
 	def save(self, commit=False):
-		recipient = Recipient()
-		first_name = self.cleaned_data.get('first_name')
-		last_name = self.cleaned_data.get('last_name')
-		street = self.cleaned_data.get('street')
-		city = self.cleaned_data.get('city')
-		country = self.cleaned_data.get('country')
-		recipient.first_name = first_name
-		recipient.last_name = last_name
-		recipient.street = street
-		recipient.city = city
-		recipient.country = country
+		try:
+			recipient = Recipient.objects.get(first_name=self.cleaned_date.get('first_name').title())
+		except Recipient.DoesNotExist:
+			recipient = Recipient()
+			first_name = self.cleaned_data.get('first_name')
+			last_name = self.cleaned_data.get('last_name')
+			street = self.cleaned_data.get('street')
+			city = self.cleaned_data.get('city')
+			country = self.cleaned_data.get('country')
+			recipient.first_name = first_name
+			recipient.last_name = last_name
+			recipient.street = street
+			recipient.city = city
+			recipient.country = country
 		fields = recipient._meta.fields
 
 		for field in fields:

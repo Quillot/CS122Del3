@@ -51,10 +51,10 @@
 	</table>
 	<strong><p class="pull-right" id="output">Total: Php </p></strong>
 	<script>
-		var total = 1;
+		var total = 0;
 		var totals = document.querySelectorAll(".total");
 		for (var i = 0; i < totals.length; i++) {
-			total *= Number(totals[i].innerText);
+			total += Number(totals[i].innerText);
 		}
 		document.getElementById("output").innerHTML += total;
 	</script>

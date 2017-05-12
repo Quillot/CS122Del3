@@ -126,6 +126,7 @@ def cart(request):
 					user_cart.cart_ready = True
 					user_cart.save()
 					delivery = Delivery(order_id=user_cart, recipient_id=recipient)
+					delivert.gift = True
 					delivery.save()
 					request.session['message'] = "Checkout Successful!"
 					return redirect('cart')	
@@ -152,18 +153,21 @@ def checkout(request):
 			#when recipient is self
 			customer = Customer.objects.get(customer_id=request.user.id)
 			agent = Agent.objects.get(agent_id=customer.agent_id.agent_id)
-			recipient = Recipient()
 			user_cart = OrderInfo.objects.get(customer_id=request.user.id, issue_date=None, cart_ready=False)
 			content_list = Content.objects.filter(order_id=user_cart)
 			user_cart.cart_ready = True
 			user_cart.save()
 			customer = Customer.objects.get(pk=request.user.id)
-			recipient.first_name = request.user.first_name
-			recipient.last_name = request.user.last_name
-			recipient.street = customer.street
-			recipient.city = customer.city
-			recipient.country = customer.country
-			recipient.save()
+			try:
+				recipient = Recipient.objects.get(first_name=request.user.first_name)
+			except Recipient.DoesNotExist:
+				recipient = Recipient()
+				recipient.first_name = request.user.first_name
+				recipient.last_name = request.user.last_name
+				recipient.street = customer.street
+				recipient.city = customer.city
+				recipient.country = customer.country
+				recipient.save()
 			delivery = Delivery(delivery_id = user_cart.order_id, order_id=user_cart, recipient_id=recipient)
 			delivery.save()
 			agent.total_transactions += 1
