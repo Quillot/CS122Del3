@@ -1,4 +1,4 @@
-USE Quillot$del3db;
+USE pixiedust$pixiedustdb;
 INSERT INTO product(product_id, name, color, quantity_stocked, personalization_limit, price)
 VALUES
 (1, 'Swiffer', 'red', 99, 8, 20.50),

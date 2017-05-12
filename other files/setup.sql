@@ -1,4 +1,4 @@
-USE del3db;
+USE pixiedustdb;
 
 DROP TABLE invite;
 DROP TABLE delivery;

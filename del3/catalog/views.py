@@ -44,7 +44,7 @@ def index(request, product_id=None):
 
 def add_to_cart(request, product_id):
 	if request.user.is_authenticated():
-		if request.method == 'POST':
+		if request.method == 'POST' and request.user.is_authenticated():
 			form = AddCartForm(request.POST)
 			if form.is_valid():
 				quantity = form.cleaned_data.get('quantity')
@@ -58,7 +58,8 @@ def add_to_cart(request, product_id):
 					warning = "Over personalization limit"
 					product_list = Product.objects.all()
 					attribs = Product._meta.fields
-					return render(request, 'catalog/index.html', {'product_list': product_list, 'attribs': attribs, 'warning': warning})
+					form = AddCartForm()
+					return render(request, 'catalog/index.html', {'form': form, 'product_list': product_list, 'attribs': attribs, 'warning': warning})
 			
 				if quantity <= 99:
 					if len(orders) == 0:  # If no current cart

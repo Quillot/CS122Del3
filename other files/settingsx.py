@@ -57,10 +57,10 @@ WSGI_APPLICATION = 'del3.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Quillot$del3db',
-        'USER': 'Quillot',
+        'NAME': 'pixiedust$pixiedustdb',
+        'USER': 'pixiedust',
         'PASSWORD': 'test192837465',
-        'HOST': 'Quillot.mysql.pythonanywhere-services.com'
+        'HOST': 'pixiedust.mysql.pythonanywhere-services.com'
     }
 }
 

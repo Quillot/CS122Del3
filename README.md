@@ -35,3 +35,15 @@ source /home/Quillot/CS122Del3/other files/setupweb.sql;
 5. Configure settings.py database connection
     * Name: Quillot$databasename
     * Host: Quillot.mysql.pythonanywhere-services.com
+
+### Setting up on pixiedust.pythonanywhere.com for deployment
+1. Using bash, enter `git clone {repo url}`
+2. Create a database named `pixiedustdb`
+3. Make a virtual environment, follow https://help.pythonanywhere.com/pages/DeployExistingDjangoProject/
+4. In the venv, run `pip install django==1.8`
+5. Go to web > add a new web app. Choose manual configuration with python 3.6
+6. Under Virtualenv, enter `/home/pixiedust/.virtualenvs/django`
+7. Under code, enter into:
+    * Source code: `/home/pixiedust/CS122Del3/del3/del3`
+8. Configure the WSGI file
+

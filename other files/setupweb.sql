@@ -1,4 +1,4 @@
-USE Quillot$del3db;
+USE pixiedust$pixiedustdb;
 
 DROP TABLE invite;
 DROP TABLE delivery;
