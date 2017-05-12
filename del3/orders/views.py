@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 
 from .models import OrderInfo, Content, Delivery
 from agents.models import Agent
+from catalog.models import Product
 from customers.models import Customer
 from datetime import datetime
 def index(request):
@@ -41,7 +42,15 @@ def approve_order(request, order_id):
 	try:
 		agent = Agent.objects.get(pk=request.user.id)
 		order = OrderInfo.objects.get(order_id=order_id)
-		if order.cart_ready is True:
+		content = Content.objects.filter(order_id=order.order_id)
+		content_products = Content.objects.filter(order_id=order.order_id).values('product_id')
+		product = Product.objects.filter(product_id__in=content_products)
+		for item in content:
+			if item.quantity_ordered <= item.product_id.quantity_stocked:
+				all_good = True
+			else:
+				all_good = False
+		if order.cart_ready is True and all_good is True:
 			order.issue_date = datetime.today()
 			order.issue_time = datetime.now().time()
 			order.delivery_date = datetime.today()
@@ -49,6 +58,10 @@ def approve_order(request, order_id):
 			order.save()
 			agent.total_transactions += 1
 			agent.save()
+			for item in content:
+				product = Product.objects.get(product_id=item.product_id.pk)
+				product.quantity_stocked -= item.quantity_ordered
+				product.save()
 			return HttpResponseRedirect(reverse('orders:index'))
 		else:
 			return HttpResponseRedirect(reverse('orders:index'))

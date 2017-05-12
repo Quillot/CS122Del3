@@ -23,7 +23,7 @@
 	{% load verbose_names %}
 	<div class="container">
 	<h1 class="text-center garamond">Your cart</h1>
-	<table class="table table-responsive table-striped">
+	<table class="table table-responsive table-striped" id="cart">
 		<tr>
 			{% for attrib in content_attribs|slice:"1:3" %}
 			<th>{% get_verbose_field attrib.name %}</th>
@@ -32,7 +32,8 @@
 			{% for attrib in content_attribs|slice:"3:" %}
 			<th>{% get_verbose_field attrib.name %}</th>
 			{% endfor %}
-			<th>Remove</th>
+			<th>Total</th>
+			<th>Cancel</th>
 		</tr>
 
 		{% for content in content_list %}
@@ -43,10 +44,20 @@
 			<td>{{content.personalization}}</td>
 			<td>{{content.quantity_ordered}}</td>
 			<td>{{content.discount}}</td>
-			<td><a href="{% url 'delete_cart_entry' content_id=content.pk %}">X</a></td>
+			<td class="total">{% get_total content.quantity_ordered content.product_id.price content.discount  %} </td>
+			<td class="text-center"><a href="{% url 'delete_cart_entry' content_id=content.pk %}">X</a></td>
 		</tr>
 		{% endfor %}
 	</table>
+	<strong><p class="pull-right" id="output">Total: Php </p></strong>
+	<script>
+		var total = 1;
+		var totals = document.querySelectorAll(".total");
+		for (var i = 0; i < totals.length; i++) {
+			total *= Number(totals[i].innerText);
+		}
+		document.getElementById("output").innerHTML += total;
+	</script>
 
 	<form class="navbar-form navbar-left" method="post">
 	    <h4>Enter recipient</h4>

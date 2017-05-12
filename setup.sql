@@ -41,7 +41,7 @@ CREATE TABLE customer (
 	street VARCHAR(255) NOT NULL DEFAULT "Shiny Street",
 	city VARCHAR(255) NOT NULL DEFAULT "Clean City",
 	country VARCHAR(255) NOT NULL DEFAULT "Cool Country",
-	FOREIGN KEY (agent_id) REFERENCES agent(agent_id)
+	FOREIGN KEY (agent_id) REFERENCES agent(agent_id) ON DELETE RESTRICT
 );
 
 CREATE TABLE recipient (
@@ -66,7 +66,7 @@ CREATE TABLE feature (
 	feature_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
 	product_id INT NOT NULL DEFAULT 1,
 	feature_desc VARCHAR(255) NOT NULL DEFAULT "",
-	FOREIGN KEY (product_id) REFERENCES product(product_id)
+	FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE
 );
 
 CREATE TABLE orderinfo (
@@ -78,26 +78,27 @@ CREATE TABLE orderinfo (
 	delivery_date DATE ,
 	delivery_time TIME,
 	cart_ready BOOLEAN NOT NULL DEFAULT 0,
-	FOREIGN KEY (agent_id) REFERENCES agent(agent_id),
-	FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
+	FOREIGN KEY (agent_id) REFERENCES agent(agent_id) ON DELETE RESTRICT,
+	FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE RESTRICT
 );
 
 CREATE TABLE content (
 	content_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
-	order_id INT NOT NULL, 	
-	product_id INT NOT NULL, 
+	order_id INT,
+	product_id INT,
 	personalization VARCHAR(255) DEFAULT "",
 	quantity_ordered INT DEFAULT 1,
 	discount FLOAT(2) DEFAULT 0.00,
-	FOREIGN KEY (order_id) REFERENCES orderinfo(order_id),
-	FOREIGN KEY (product_id) REFERENCES product(product_id)
+	FOREIGN KEY (order_id) REFERENCES orderinfo(order_id) ON DELETE SET NULL,
+	FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE SET NULL
 );
+
 
 CREATE TABLE delivery (
 	delivery_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
-	order_id INT NOT NULL UNIQUE,
-	recipient_id INT DEFAULT NULL,
+	order_id INT,
+	recipient_id INT,
 	gift BOOLEAN, 
-	FOREIGN KEY (order_id) REFERENCES orderinfo(order_id),
-	FOREIGN KEY (recipient_id) REFERENCES recipient(recipient_id)
+	FOREIGN KEY (order_id) REFERENCES orderinfo(order_id) ON DELETE SET NULL,
+	FOREIGN KEY (recipient_id) REFERENCES recipient(recipient_id) ON DELETE SET NULL
 );	

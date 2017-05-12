@@ -51,7 +51,6 @@
 			{% for attrib in attribs|slice:"1:"%}
 			<th>{% get_verbose_field attrib.name %}</th>
 			{% endfor %}
-			<th>Remove</th>
 		</tr>
 		{% for agent in agent_list %}
 		<tr>
@@ -59,9 +58,6 @@
 			<td>{{agent.agent_id.first_name}}</td>
 			<td>{{agent.agent_id.last_name}}</td>
 			<td>{{agent.total_transactions}}</td>
-			{% if user.is_staff %}
-				<td><a href="{% url 'agents:delete_agent' agent_id=agent.pk %}">X</a></td>
-			{% endif %}
 		</tr>
 		{% endfor %}
 	</table>

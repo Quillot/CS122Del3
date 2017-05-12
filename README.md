@@ -40,10 +40,13 @@ source /home/Quillot/CS122Del3/other files/setupweb.sql;
 1. Using bash, enter `git clone {repo url}`
 2. Create a database named `pixiedustdb`
 3. Make a virtual environment, follow https://help.pythonanywhere.com/pages/DeployExistingDjangoProject/
-4. In the venv, run `pip install django==1.8`, and `pip install https://github.com/davispuh/MySQL-for-Python-3/archive/1.0.tar.gz`
+4. In the venv, run `pip install django==1.8`, and `pip install mysqlclient`
 5. Go to web > add a new web app. Choose manual configuration with python 3.6
 6. Under Virtualenv, enter `/home/pixiedust/.virtualenvs/django`
 7. Under code, enter into:
     * Source code: `/home/pixiedust/CS122Del3/del3/del3`
 8. Configure the WSGI file
+9. Migrate auth first, then just migrate
+10. source /home/pixiedust/CS122Del3/other files/setupweb.sql;
+11. Set up static `/static/` and `/home/pixiedust/CS122Del3/del3/del3/static`
 
