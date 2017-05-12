@@ -10,20 +10,6 @@ DROP TABLE recipient;
 DROP TABLE customer;
 DROP TABLE agent;
 
--- CREATE table auth_user (
--- 	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
--- 	password VARCHAR(255) NOT NULL,
--- 	last_login DATETIME,
--- 	is_superuser BOOLEAN NOT NULL,
--- 	username VARCHAR(30) NOT NULL,
--- 	first_name VARCHAR(30) NOT NULL,
--- 	last_name VARCHAR(30) NOT NULL,
--- 	email VARCHAR(254) NOT NULL,
--- 	is_staff BOOLEAN NOT NULL,
--- 	is_active BOOLEAN NOT NULL,
--- 	date_joined DATETIME NOT NULL
--- );
-
 CREATE TABLE agent (
 	agent_id INT NOT NULL PRIMARY KEY UNIQUE,
 	total_transactions INT NOT NULL DEFAULT 0

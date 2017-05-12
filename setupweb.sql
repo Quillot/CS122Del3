@@ -8,7 +8,7 @@ DROP TABLE feature;
 DROP TABLE product;
 DROP TABLE recipient;
 DROP TABLE customer;
-DROP TABLE agent
+DROP TABLE agent;
 
 CREATE TABLE agent (
 	agent_id INT NOT NULL PRIMARY KEY UNIQUE,
