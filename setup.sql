@@ -79,7 +79,6 @@ CREATE TABLE content (
 	FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE SET NULL
 );
 
-
 CREATE TABLE delivery (
 	delivery_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
 	order_id INT,

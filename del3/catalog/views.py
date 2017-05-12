@@ -118,10 +118,6 @@ def insert_contents(cart, product, qty, prsn):
 		contents.discount = 0.00
 	contents.personalization = prsn
 	contents.save()
-
-	# product.quantity_stocked -= 10
-	# product.save()
-
 	return contents
 
 def add_product(request):
@@ -130,9 +126,6 @@ def add_product(request):
 			form = ProductForm(request.POST)
 			if form.is_valid():
 				product = form.save()
-				features = form.cleaned_data.get('features')
-				for feature in features.splitlines():
-					Feature(product_id=product, feature_desc=feature.strip()).save()
 				return HttpResponseRedirect(reverse('catalog:index'))
 			else:
 				return render(request, 'catalog/addproduct.html', {'form': form})

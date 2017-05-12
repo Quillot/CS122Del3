@@ -60,22 +60,22 @@ class SignUpAgentForm(UserCreationForm):
 	first_name = forms.CharField(max_length = 30, required=True, help_text='Required')
 	last_name = forms.CharField(max_length=30, required=True, help_text='Required')
 	email = forms.EmailField(max_length=254, required=True, help_text='Required')
-	code = forms.IntegerField(required=True, help_text='Enter invitation code')
+	invite = forms.IntegerField(required=True, help_text='Enter invitation code')
 
 	class Meta:
 		model = User
 		fields = ('username', 'first_name', 'last_name', 'password1', 
-			'password2', 'email', 'code')
+			'password2', 'email', 'invite')
 
 	def save(self, commit=False):
 		user = User.objects.create_user(username=self.clean_username(), password=self.cleaned_data['password1'])
 		user.email = self.clean_email()
 		user.first_name = self.cleaned_data.get('first_name')
 		user.last_name = self.cleaned_data.get('last_name')
-		code = self.clean_code()[0]
-		if code:
-			code.used = True
-			code.save()
+		codex = self.clean_code()
+		if codex:
+			codex.used = True
+			codex.save()
 		fields = user._meta.fields
 		for field in fields:
 			if field is not None:
@@ -101,14 +101,14 @@ class SignUpAgentForm(UserCreationForm):
 			return email
 
 	def clean_code(self):
-		invite_code = self.cleaned_data.get('code')
-		code = Invite.objects.filter(invite_code=invite_code)
-		if len(code) == 0:
+		try:
+			x = self.cleaned_data.get('invite')
+			codex = Invite.objects.get(invite_code=x)
+			if codex.used == True:
+				raise forms.ValidationError('Code already used')
+		except Invite.DoesNotExist:
 			raise forms.ValidationError('Code not found')
-		elif code[0].used == 1:
-			raise forms.ValidationError('Code already used')
-		else:
-			return code
+		return codex
 
 class CartForm(forms.Form):
 	first_name = forms.CharField(max_length=255, required=True)
