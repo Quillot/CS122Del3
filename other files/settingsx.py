@@ -74,5 +74,6 @@ USE_L10N = True
 
 USE_TZ = True
 
+STATIC_ROOT = "/home/Quillot/CS122Del3/del3/del3/static"
 
 STATIC_URL = '/static/'

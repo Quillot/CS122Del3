@@ -17,7 +17,9 @@
 7. To reset the database, run `python manage.py flush`, and do step 6 again
 ### Steps for connecting to PythonAnywhere
 Link - Quillot.pythonanywhere.com
+
 Run git pull, and then source django/bin/activate
+
 source /home/Quillot/CS122Del3/other files/setupweb.sql;
 1. Fix code section.
     * Source code: /home/Quillot/CS122Del3/del3/del3
