@@ -1,5 +1,3 @@
-DROP DATABASE Quillot$del3db;
-CREATE DATABASE Quillot$del3db;
 USE Quillot$del3db;
 
 DROP TABLE invite;
@@ -11,6 +9,20 @@ DROP TABLE product;
 DROP TABLE recipient;
 DROP TABLE customer;
 DROP TABLE agent;
+
+-- CREATE table auth_user (
+-- 	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
+-- 	password VARCHAR(255) NOT NULL,
+-- 	last_login DATETIME,
+-- 	is_superuser BOOLEAN NOT NULL,
+-- 	username VARCHAR(30) NOT NULL,
+-- 	first_name VARCHAR(30) NOT NULL,
+-- 	last_name VARCHAR(30) NOT NULL,
+-- 	email VARCHAR(254) NOT NULL,
+-- 	is_staff BOOLEAN NOT NULL,
+-- 	is_active BOOLEAN NOT NULL,
+-- 	date_joined DATETIME NOT NULL
+-- );
 
 CREATE TABLE agent (
 	agent_id INT NOT NULL PRIMARY KEY UNIQUE,
@@ -51,7 +63,8 @@ CREATE TABLE product (
 );
 
 CREATE TABLE feature (
-	product_id INT NOT NULL PRIMARY KEY DEFAULT 1,
+	feature_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
+	product_id INT NOT NULL DEFAULT 1,
 	feature_desc VARCHAR(255) NOT NULL DEFAULT "",
 	FOREIGN KEY (product_id) REFERENCES product(product_id)
 );
@@ -64,6 +77,7 @@ CREATE TABLE orderinfo (
 	issue_time TIME,
 	delivery_date DATE ,
 	delivery_time TIME,
+	cart_ready BOOLEAN NOT NULL DEFAULT 0,
 	FOREIGN KEY (agent_id) REFERENCES agent(agent_id),
 	FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
 );
@@ -72,7 +86,6 @@ CREATE TABLE content (
 	content_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
 	order_id INT NOT NULL, 	
 	product_id INT NOT NULL, 
-	-- PRIMARY KEY (order_id, product_id),
 	personalization VARCHAR(255) DEFAULT "",
 	quantity_ordered INT DEFAULT 1,
 	discount FLOAT(2) DEFAULT 0.00,
@@ -83,9 +96,8 @@ CREATE TABLE content (
 CREATE TABLE delivery (
 	delivery_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
 	order_id INT NOT NULL UNIQUE,
-	recipient_id INT NOT NULL DEFAULT 1,
-	-- PRIMARY KEY (order_id, recipient_id),
-	-- gift BOOLEAN, 
+	recipient_id INT DEFAULT NULL,
+	gift BOOLEAN, 
 	FOREIGN KEY (order_id) REFERENCES orderinfo(order_id),
 	FOREIGN KEY (recipient_id) REFERENCES recipient(recipient_id)
 );	
