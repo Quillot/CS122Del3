@@ -22,7 +22,7 @@ class SignUpForm(UserCreationForm):
 		model = User
 		fields = ('username', 'first_name', 'last_name', 'password1', 
 			'password2', 'email', 'agent', 'street', 'city', 'country')
-
+#
 	def save(self, commit=False):
 		user = User.objects.create_user(username=self.clean_username(), password=self.cleaned_data['password1'])
 		user.email = self.clean_email()
