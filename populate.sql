@@ -37,7 +37,6 @@ VALUES
 INSERT INTO auth_user(id, password, last_login, is_superuser, username, first_name, 
 						last_name, email, is_staff, is_active, date_joined)
 VALUES
-#id 1 belongs to superuser
 (2, '', NOW(), 0, 'jude', 'jude', 'bautista', 'jude@gmail.com', 0, 1, CURDATE()),
 (3, '', NOW(), 0, 'nikki', 'nikki', 'uy', 'nikki@gmail.com', 0, 1, CURDATE()),
 (4, '', NOW(), 0, 'jayce', 'jayce', 'ching', 'jayce@gmail.com', 0, 1, CURDATE()),
@@ -45,8 +44,8 @@ VALUES
 
 INSERT INTO agent(agent_id, total_transactions)
 VALUES
-(2, 2), # makes jude an agent
-(3, 1); # makes nikki an agent
+(2, 2), 
+(3, 1); 
 
 INSERT INTO customer(customer_id, agent_id, street, city, country)
 VALUES
