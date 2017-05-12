@@ -47,6 +47,6 @@ source /home/Quillot/CS122Del3/other files/setupweb.sql;
     * Source code: `/home/pixiedust/CS122Del3/del3/del3`
 8. Configure the WSGI file
 9. Migrate auth first, then just migrate
-10. source /home/pixiedust/CS122Del3/other files/setupweb.sql;
+10. source /home/pixiedust/CS122Del3/setupweb.sql;
 11. Set up static `/static/` and `/home/pixiedust/CS122Del3/del3/del3/static`
 
