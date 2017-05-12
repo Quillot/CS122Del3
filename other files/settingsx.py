@@ -38,7 +38,7 @@ ROOT_URLCONF = 'del3.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['/home/Quillot/CS122Del3/del3/del3/templates'],
+        'DIRS': ['/home/pixiedust/CS122Del3/del3/del3/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,6 +74,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-STATIC_ROOT = "/home/Quillot/CS122Del3/del3/del3/static"
+STATIC_ROOT = "/home/pixiedust/CS122Del3/del3/del3/static"
 
 STATIC_URL = '/static/'
