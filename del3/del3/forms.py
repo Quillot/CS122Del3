@@ -118,15 +118,16 @@ class CartForm(forms.Form):
 	country = forms.CharField(max_length=255, required=True)
 
 	def save(self, commit=False):
+		first_name = self.cleaned_data.get('first_name')
+		last_name = self.cleaned_data.get('last_name')
+		street = self.cleaned_data.get('street')
+		city = self.cleaned_data.get('city')
+		country = self.cleaned_data.get('country')
 		try:
-			recipient = Recipient.objects.get(first_name=self.cleaned_date.get('first_name').title())
+			recipient = Recipient.objects.get(first_name=first_name, last_name=last_name,
+				street=street, city=city, country=country)
 		except Recipient.DoesNotExist:
 			recipient = Recipient()
-			first_name = self.cleaned_data.get('first_name')
-			last_name = self.cleaned_data.get('last_name')
-			street = self.cleaned_data.get('street')
-			city = self.cleaned_data.get('city')
-			country = self.cleaned_data.get('country')
 			recipient.first_name = first_name
 			recipient.last_name = last_name
 			recipient.street = street

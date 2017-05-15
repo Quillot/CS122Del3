@@ -127,7 +127,7 @@ def cart(request):
 					user_cart.cart_ready = True
 					user_cart.save()
 					delivery = Delivery(order_id=user_cart, recipient_id=recipient)
-					delivert.gift = True
+					delivery.gift = True
 					delivery.save()
 					request.session['message'] = "Checkout Successful!"
 					return redirect('cart')	
