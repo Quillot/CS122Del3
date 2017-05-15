@@ -11,7 +11,7 @@
 <body>
 	{% extends 'del3/base.html' %}
 	{% load verbose_names %}
-
+	{% load static %}
 	{% block content %}
 	{% if not user.is_staff %}
 	<h1 class="mp3">AGENT LIST</h1>
@@ -21,7 +21,7 @@
 		<div class="row mp10">
 		{% for agent in agent_list %}
 			<div class="col-md-2 mp11">
-				<img width="100px" height="100px" src = "/static/css/person-icon.png"></img>
+				<img width="100px" height="100px" class="agentimage" src="{% static 'css/person-icon.png' %}" alt="Agent Image"></img>
 			</div>
 			<p></p>
 			<div class="col-md-10">
